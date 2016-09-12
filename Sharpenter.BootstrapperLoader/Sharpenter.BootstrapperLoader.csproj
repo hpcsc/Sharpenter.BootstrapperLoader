@@ -49,6 +49,7 @@
     <Compile Include="Builder\LoaderBuilderBase.cs" />
     <Compile Include="Builder\LoaderClassConfigBuilder.cs" />
     <Compile Include="FileSystemAssemblyProvider.cs" />
+    <Compile Include="Helpers\MethodInfoExtensions.cs" />
     <Compile Include="IAssemblyProvider.cs" />
     <Compile Include="Internal\LoaderConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
