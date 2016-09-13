@@ -13,7 +13,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
         internal string ConfigureMethodName { get; set; }
         internal IAssemblyProvider AssemblyProvider { get; set; }
 
-        public LoaderConfig()
+        internal LoaderConfig()
         {
             BootstrapperClassName = BootstrapperDefaultClassName;
             ConfigureContainerMethodName = ConfigureContainerDefaultMethodName;

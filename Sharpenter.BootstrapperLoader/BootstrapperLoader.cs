@@ -32,7 +32,7 @@ namespace Sharpenter.BootstrapperLoader
                                   .Select(Activator.CreateInstance));
         }
 
-        public void ConfigureContainer(object container)
+        public void TriggerConfigureContainer(object container)
         {
             foreach (var bootstrapper in _bootstrappers)
             {
@@ -42,7 +42,7 @@ namespace Sharpenter.BootstrapperLoader
             }
         }
 
-        public void Configure(IServiceLocator serviceLocator)
+        public void TriggerConfigure(IServiceLocator serviceLocator)
         {
             foreach (var bootstrapper in _bootstrappers)
             {
