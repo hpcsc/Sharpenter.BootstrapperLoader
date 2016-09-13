@@ -34,11 +34,14 @@ namespace Sharpenter.BootstrapperLoader
 
         public void TriggerConfigureContainer(object container)
         {
+            var configureContainerParamTypes = new [] { container.GetType() };
+            var configureContainerParam = new[] {container};
+
             foreach (var bootstrapper in _bootstrappers)
             {
                 bootstrapper.GetType()
-                    .GetMethod(_config.ConfigureContainerMethodName, new [] { container.GetType() })
-                    ?.Invoke(bootstrapper, new[] { container });
+                    .GetMethod(_config.ConfigureContainerMethodName, configureContainerParamTypes)
+                    ?.Invoke(bootstrapper, configureContainerParam);
             }
         }
 
