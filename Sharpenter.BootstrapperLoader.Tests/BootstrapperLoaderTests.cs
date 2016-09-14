@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Autofac;
@@ -125,7 +126,10 @@ namespace Sharpenter.BootstrapperLoader.Tests
                     AssemblyProvider = new InMemoryAssemblyProvider(() => new[] { testDll }),
                     BootstrapperClassName = "SomeBootstrapper",
                     ConfigureContainerMethodName = "SomeConfigureContainer",
-                    ConfigureMethodName = "SomeConfigure"
+                    ConfigureMethods = new Dictionary<string, Func<bool>>
+                    {
+                        { "SomeConfigure", () => true }
+                    }
                 }, type => _bootstrapperMock.Object);
                 _subject.Initialize();
 

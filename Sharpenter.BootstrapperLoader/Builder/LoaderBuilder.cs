@@ -21,9 +21,9 @@ namespace Sharpenter.BootstrapperLoader.Builder
             return this;
         }
 
-        public LoaderClassConfigBuilder ForClass()
+        public ForClassSyntax ForClass()
         {
-            return new LoaderClassConfigBuilder(Config);
+            return new ForClassSyntax(Config);
         }
     }
 }

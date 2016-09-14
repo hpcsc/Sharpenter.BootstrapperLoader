@@ -2,32 +2,30 @@
 
 namespace Sharpenter.BootstrapperLoader.Builder
 {
-    public class LoaderClassConfigBuilder : LoaderBuilderBase
+    public class ForClassSyntax : LoaderBuilderBase
     {
-        internal LoaderClassConfigBuilder(LoaderConfig config)
+        internal ForClassSyntax(LoaderConfig config)
             : base(config)
         {
         }
 
-        public LoaderClassConfigBuilder WithName(string bootstrapperClassName)
+        public ForClassSyntax WithName(string bootstrapperClassName)
         {
             Config.BootstrapperClassName = bootstrapperClassName;
 
             return this;
         }
 
-        public LoaderClassConfigBuilder ConfigureContainerWith(string configureContainerMethodName)
+        public ForClassSyntax ConfigureContainerWith(string configureContainerMethodName)
         {
             Config.ConfigureContainerMethodName = configureContainerMethodName;
 
             return this;
         }
 
-        public LoaderClassConfigBuilder ConfigureWith(string configureMethodName)
+        public MethodsSyntax Methods()
         {
-            Config.ConfigureMethodName = configureMethodName;
-
-            return this;
+            return new MethodsSyntax(Config);
         }
 
         public LoaderBuilder And()

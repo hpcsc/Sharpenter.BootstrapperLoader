@@ -47,7 +47,8 @@
     <Compile Include="BootstrapperLoader.cs" />
     <Compile Include="Builder\LoaderBuilder.cs" />
     <Compile Include="Builder\LoaderBuilderBase.cs" />
-    <Compile Include="Builder\LoaderClassConfigBuilder.cs" />
+    <Compile Include="Builder\ForClassSyntax.cs" />
+    <Compile Include="Builder\MethodsSyntax.cs" />
     <Compile Include="FileSystemAssemblyProvider.cs" />
     <Compile Include="Helpers\MethodInfoExtensions.cs" />
     <Compile Include="IAssemblyProvider.cs" />
