@@ -1,4 +1,5 @@
-﻿using Sharpenter.BootstrapperLoader.Internal;
+﻿using System;
+using Sharpenter.BootstrapperLoader.Internal;
 
 namespace Sharpenter.BootstrapperLoader.Builder
 {
@@ -13,7 +14,7 @@ namespace Sharpenter.BootstrapperLoader.Builder
 
         public BootstrapperLoader Build()
         {
-            var loader = new BootstrapperLoader(Config);
+            var loader = new BootstrapperLoader(Config, Activator.CreateInstance);
             loader.Initialize();
 
             return loader;

@@ -70,6 +70,7 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BootstrapperLoaderTests.cs" />
     <Compile Include="Builder\LoaderBuilderTests.cs" />
     <Compile Include="Helpers\MethodInfoExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

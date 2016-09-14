@@ -51,6 +51,7 @@
     <Compile Include="FileSystemAssemblyProvider.cs" />
     <Compile Include="Helpers\MethodInfoExtensions.cs" />
     <Compile Include="IAssemblyProvider.cs" />
+    <Compile Include="InMemoryAssemblyProvider.cs" />
     <Compile Include="Internal\LoaderConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
