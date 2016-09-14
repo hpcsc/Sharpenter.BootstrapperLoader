@@ -10,11 +10,13 @@ namespace Sharpenter.BootstrapperLoader
     public class BootstrapperLoader
     {
         private readonly LoaderConfig _config;
+        private readonly Func<Type, object> _instanceCreator;
         private IEnumerable<object> _bootstrappers;
 
-        internal BootstrapperLoader(LoaderConfig config)
+        internal BootstrapperLoader(LoaderConfig config, Func<Type, object> instanceCreator)
         {
             _config = config;
+            _instanceCreator = instanceCreator;
         }
 
         internal void Initialize()
@@ -29,7 +31,7 @@ namespace Sharpenter.BootstrapperLoader
             _bootstrappers = assembliesWithBootstrapper
                 .SelectMany(a => a.GetTypes()
                                   .Where(t => t.Name == _config.BootstrapperClassName)
-                                  .Select(Activator.CreateInstance));
+                                  .Select(_instanceCreator));
         }
 
         public void TriggerConfigureContainer(object container)
