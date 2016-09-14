@@ -9,29 +9,31 @@ namespace Sharpenter.BootstrapperLoader
 {
     public class BootstrapperLoader
     {
-        private readonly LoaderConfig _config;
         private readonly Func<Type, object> _instanceCreator;
-        private IEnumerable<object> _bootstrappers;
+        private List<object> _bootstrappers;
+
+        internal LoaderConfig Config { get; set; }
 
         internal BootstrapperLoader(LoaderConfig config, Func<Type, object> instanceCreator)
         {
-            _config = config;
+            Config = config;
             _instanceCreator = instanceCreator;
         }
 
         internal void Initialize()
         {
-            var assemblies = _config.AssemblyProvider.Find();
+            var assemblies = Config.AssemblyProvider.Find();
 
             var assembliesWithBootstrapper =
                 assemblies.Where(
                     a => a.GetTypes()
-                          .FirstOrDefault(t => t.Name == _config.BootstrapperClassName) != null);
+                          .FirstOrDefault(t => t.Name == Config.BootstrapperClassName) != null);
 
             _bootstrappers = assembliesWithBootstrapper
                 .SelectMany(a => a.GetTypes()
-                                  .Where(t => t.Name == _config.BootstrapperClassName)
-                                  .Select(_instanceCreator));
+                                  .Where(t => t.Name == Config.BootstrapperClassName)
+                                  .Select(_instanceCreator))
+                                  .ToList();
         }
 
         public void TriggerConfigureContainer(object container)
@@ -39,23 +41,23 @@ namespace Sharpenter.BootstrapperLoader
             var configureContainerParamTypes = new [] { container.GetType() };
             var configureContainerParam = new[] {container};
 
-            foreach (var bootstrapper in _bootstrappers)
-            {
+            _bootstrappers.ForEach(bootstrapper => 
                 bootstrapper.GetType()
-                    .GetMethod(_config.ConfigureContainerMethodName, configureContainerParamTypes)
-                    ?.Invoke(bootstrapper, configureContainerParam);
-            }
+                            .GetMethod(Config.ConfigureContainerMethodName, configureContainerParamTypes)
+                            ?.Invoke(bootstrapper, configureContainerParam));
         }
 
         public void TriggerConfigure(IServiceLocator serviceLocator)
         {
-            foreach (var bootstrapper in _bootstrappers)
+            _bootstrappers.ForEach(bootstrapper =>
             {
-                bootstrapper
-                    .GetType()
-                    .GetMethod(_config.ConfigureMethodName)
-                    ?.InvokeWithDynamicallyResolvedParameters(bootstrapper, serviceLocator);                
-            }
+                Config.ConfigureMethods
+                       .Where(c => c.Value())
+                       .ToList()
+                       .ForEach(methodConfiguration => bootstrapper.GetType()
+                                                                   .GetMethod(methodConfiguration.Key)
+                                                                   ?.InvokeWithDynamicallyResolvedParameters(bootstrapper, serviceLocator));
+            });
         }
     }
 }

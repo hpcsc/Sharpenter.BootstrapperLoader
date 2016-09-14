@@ -83,18 +83,53 @@ public class Startup
 
 ## Configuration
 
-During configuration of `BootstrapperLoader`, it's possible to specify class name to look for (default is Bootstrapper), configure container method to look for (default is ConfigureContainer), configure method to look for (default is Configure):
+During configuration of `BootstrapperLoader`, it's possible to specify class name to look for (default is Bootstrapper):
 
 ```
 _bootstrapperLoader = new LoaderBuilder()
                     .ForClass()
                         .WithName("SomeBootstrapper")
-                        .ConfigureContainerWith("SomeConfigureContainerMethod")
-                        .ConfigureWith("SomeConfigureMethod")
-                    .And()
-                    .Use(new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "MyCoolProject*.dll")) //Look into current directory, grabs all dlls starting with MyCoolProject
                     .Build();
 ```
+
+or  configure container method to look for (default is ConfigureContainer):
+
+```
+_bootstrapperLoader = new LoaderBuilder()
+                    .ForClass()
+                        .ConfigureContainerWith("SomeConfigureContainerMethod")
+                    .Build();
+```
+
+or configure method to look for (default is Configure):
+
+```
+_bootstrapperLoader = new LoaderBuilder()
+                    .ForClass()
+                        .Methods()
+                            .Call("SomeConfigureMethod")
+                    .Build();
+```
+
+or configure method and condition when should that method is called:
+
+```
+_bootstrapperLoader = new LoaderBuilder()
+                    .ForClass()
+                        .Methods()
+                            .Call("SomeConfigureMethod").If(() => /*some expression returning boolean*/)
+                    .Build();
+```
+
+or specify where to load assemblies (default is loading all dlls from current directory):
+
+```
+_bootstrapperLoader = new LoaderBuilder()
+                        .Use(new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "MyCoolProject*.dll")) //Look into current directory, grabs all dlls starting with MyCoolProject
+                        .Build();
+```
+
+or combination of above configuration
 
 You can also create new Assembly Provider class, to customize the source of assemblies provided to the loader. At the moment, there are 2 classes provided:
 ```

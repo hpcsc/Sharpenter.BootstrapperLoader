@@ -8,36 +8,72 @@ namespace Sharpenter.BootstrapperLoader.Tests.Builder
     [Subject(typeof(LoaderBuilder))]
     public class LoaderBuilderTests
     {
-        private static LoaderBuilder _subject;
+        private static Mock<IAssemblyProvider> _assemblyProviderMock;
+        private static BootstrapperLoader _loader;
 
         private Establish context = () =>
         {
-            _subject = new LoaderBuilder();
+            _assemblyProviderMock = new Mock<IAssemblyProvider>();
         };
 
-        public class UseMethod
+        public class When_provided_an_assembly_loader
         {
-            private Establish context = () =>
-            {
-                _assemblyProviderMock = new Mock<IAssemblyProvider>();                
-            };
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .Build();
 
-            private Because of = () => _subject.Use(_assemblyProviderMock.Object);
-
-            private It should_set_config_to_correct_assembly_provider =
-                () => _subject.Config.AssemblyProvider.ShouldEqual(_assemblyProviderMock.Object);
-            
-            private static Mock<IAssemblyProvider> _assemblyProviderMock;
+            private It should_initialize_loader_with_this_assembly_loader =
+                () => _loader.Config.AssemblyProvider.ShouldEqual(_assemblyProviderMock.Object);
         }
 
-        public class ForClassMethod
+        public class When_config_class_name_using_builder
         {
-            private Because of = () => _classConfig = _subject.ForClass();
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .ForClass()
+                                                            .WithName("SomeBootstrapper")
+                                                        .Build();
 
-            private It should_create_class_config_builder_with_existing_configuration =
-                () => _classConfig.Config.ShouldEqual(_subject.Config);
+            private It should_initialize_loader_with_that_class_name =
+                () => _loader.Config.BootstrapperClassName.ShouldEqual("SomeBootstrapper");            
+        }
 
-            private static LoaderClassConfigBuilder _classConfig;
+        public class When_config_configure_container_name_using_builder
+        {
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .ForClass()
+                                                            .ConfigureContainerWith("SomeConfigureContainer")
+                                                        .Build();
+
+            private It should_initialize_loader_with_that_configure_container_method_name =
+                () => _loader.Config.ConfigureContainerMethodName.ShouldEqual("SomeConfigureContainer");            
+        }
+
+        public class When_clearing_all_config_method_configurations
+        {
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .ForClass()
+                                                            .Methods()
+                                                                .ClearAll()
+                                                        .Build();
+
+            private It should_not_have_any_method_configurations_in_loader =
+                () => _loader.Config.ConfigureMethods.Count.ShouldEqual(0);
+        }
+
+        public class When_config_method_without_if_condition
+        {
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .ForClass()
+                                                            .Methods()
+                                                                .Call("SomeConfigure")
+                                                        .Build();
+
+            private It should_always_call_that_method =
+                () => _loader.Config.ConfigureMethods["SomeConfigure"]().ShouldBeTrue();
         }
     }
 }
