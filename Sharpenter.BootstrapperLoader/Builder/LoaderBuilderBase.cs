@@ -1,11 +1,10 @@
-﻿using System;
-using Sharpenter.BootstrapperLoader.Internal;
+﻿using Sharpenter.BootstrapperLoader.Internal;
 
 namespace Sharpenter.BootstrapperLoader.Builder
 {
     public abstract class LoaderBuilderBase
     {
-        internal readonly LoaderConfig Config;
+        internal LoaderConfig Config { get; set; }
 
         internal LoaderBuilderBase(LoaderConfig config)
         {
@@ -14,7 +13,7 @@ namespace Sharpenter.BootstrapperLoader.Builder
 
         public BootstrapperLoader Build()
         {
-            var loader = new BootstrapperLoader(Config, Activator.CreateInstance);
+            var loader = new BootstrapperLoader(Config);
             loader.Initialize();
 
             return loader;

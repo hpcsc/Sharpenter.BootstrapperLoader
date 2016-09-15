@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Autofac;
 using Autofac.Extras.CommonServiceLocator;
 using Machine.Specifications;
 using Moq;
-using Sharpenter.BootstrapperLoader.Internal;
+using Sharpenter.BootstrapperLoader.Builder;
 using It = Machine.Specifications.It;
 
 namespace Sharpenter.BootstrapperLoader.Tests
@@ -46,19 +44,23 @@ namespace Sharpenter.BootstrapperLoader.Tests
             }
         }
 
+        private static BootstrapperLoader _subject;
+        private static ContainerBuilder _containerBuilder;
+        private Establish context = () =>
+        {
+            _containerBuilder = new ContainerBuilder();
+        };
+
         public class With_default_method_name_configuration
         {
             private Establish context = () =>
             {
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<Bootstrapper>();
-                _subject = new BootstrapperLoader(new LoaderConfig
-                {
-                    AssemblyProvider = new InMemoryAssemblyProvider(() => new [] { testDll })
-                }, type => _bootstrapperMock.Object);
-                _subject.Initialize();
-
-                _containerBuilder = new ContainerBuilder();
+                _subject = new LoaderBuilder()
+                        .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
+                        .UseInstanceCreator(type => _bootstrapperMock.Object)
+                        .Build();
             };
 
             public class When_triggering_configure_container
@@ -109,9 +111,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
 
                 private static Exception _exception;
             }
-
-            private static BootstrapperLoader _subject;
-            private static ContainerBuilder _containerBuilder;
+            
             private static Mock<Bootstrapper> _bootstrapperMock;
         }
 
@@ -121,19 +121,16 @@ namespace Sharpenter.BootstrapperLoader.Tests
             {
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<SomeBootstrapper>();
-                _subject = new BootstrapperLoader(new LoaderConfig
-                {
-                    AssemblyProvider = new InMemoryAssemblyProvider(() => new[] { testDll }),
-                    BootstrapperClassName = "SomeBootstrapper",
-                    ConfigureContainerMethodName = "SomeConfigureContainer",
-                    ConfigureMethods = new Dictionary<string, Func<bool>>
-                    {
-                        { "SomeConfigure", () => true }
-                    }
-                }, type => _bootstrapperMock.Object);
-                _subject.Initialize();
-
-                _containerBuilder = new ContainerBuilder();
+                _subject = new LoaderBuilder()
+                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
+                    .ForClass()
+                        .WithName("SomeBootstrapper")
+                        .ConfigureContainerWith("SomeConfigureContainer")
+                        .Methods()
+                            .ClearAll()
+                            .Call("SomeConfigure")
+                    .Build();
             };
 
             public class When_triggering_configure_container
@@ -184,10 +181,64 @@ namespace Sharpenter.BootstrapperLoader.Tests
 
                 private static Exception _exception;
             }
-
-            private static BootstrapperLoader _subject;
-            private static ContainerBuilder _containerBuilder;
+            
             private static Mock<SomeBootstrapper> _bootstrapperMock;
+        }
+
+        public class When_configure_method_condition_returns_false
+        {
+            private Establish context = () =>
+            {
+                var testDll = Assembly.GetExecutingAssembly();
+                _bootstrapperMock = new Mock<Bootstrapper>();
+                _subject = new LoaderBuilder()
+                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .Use(new InMemoryAssemblyProvider(() => new[] {testDll}))
+                    .ForClass()
+                        .Methods()
+                        .ClearAll()
+                        .Call("Configure").If(() => false)
+                    .Build();
+            };
+
+            private Because of = () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+
+            private It should_not_be_called_when_triggering_loader =
+                () =>
+                    _bootstrapperMock.Verify(
+                        b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()),
+                        Times.Never);
+
+            private static Mock<Bootstrapper> _bootstrapperMock;
+        }
+
+        public class When_configure_method_condition_returns_true
+        {
+            private Establish context = () =>
+            {
+                _containerBuilder.RegisterType<FirstDependency>().As<IFirstDependency>();
+                _containerBuilder.RegisterType<SecondDependency>().As<ISecondDependency>();
+
+                var testDll = Assembly.GetExecutingAssembly();
+                _bootstrapperMock = new Mock<Bootstrapper>();
+                _subject = new LoaderBuilder()
+                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
+                    .ForClass()
+                        .Methods()
+                        .ClearAll()
+                        .Call("Configure").If(() => true)
+                    .Build();
+            };
+
+            private Because of = () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+
+            private It should_be_called_when_triggering_loader =
+                () =>
+                    _bootstrapperMock.Verify(
+                        b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()));
+
+            private static Mock<Bootstrapper> _bootstrapperMock;
         }
     }
 }

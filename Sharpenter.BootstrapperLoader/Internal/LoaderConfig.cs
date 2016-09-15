@@ -12,8 +12,9 @@ namespace Sharpenter.BootstrapperLoader.Internal
 
         private readonly Func<bool> AlwaysCall = () => true;
 
+        internal Func<Type, object> InstanceCreator { get; set; }
         internal string BootstrapperClassName { get; set; }
-        internal string ConfigureContainerMethodName { get; set; }        
+        internal string ConfigureContainerMethodName { get; set; }
         internal Dictionary<string, Func<bool>> ConfigureMethods { get; set; }
         internal IAssemblyProvider AssemblyProvider { get; set; }
 
@@ -23,22 +24,25 @@ namespace Sharpenter.BootstrapperLoader.Internal
             ConfigureContainerMethodName = ConfigureContainerDefaultMethodName;
             ConfigureMethods = new Dictionary<string, Func<bool>>
             {
-                { "Configure", AlwaysCall }
+                {ConfigureDefaultMethodName, AlwaysCall}
             };
 
+            InstanceCreator = Activator.CreateInstance;
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
         }
 
         internal void AddConfigureMethod(string methodName)
         {
-            if(ConfigureMethods.ContainsKey(methodName)) throw new ArgumentException($"Duplication configureation for method '{methodName}' detected");
+            if (ConfigureMethods.ContainsKey(methodName))
+                throw new ArgumentException($"Duplication configureation for method '{methodName}' detected");
 
             ConfigureMethods[methodName] = AlwaysCall;
         }
 
         internal void UpdateMethodCallCondition(string name, Func<bool> condition)
         {
-            if(!ConfigureMethods.ContainsKey(name)) throw new ArgumentException($"Configuration for method '{name} not found");
+            if (!ConfigureMethods.ContainsKey(name))
+                throw new ArgumentException($"Configuration for method '{name} not found");
 
             ConfigureMethods[name] = condition;
         }
@@ -47,5 +51,5 @@ namespace Sharpenter.BootstrapperLoader.Internal
         {
             ConfigureMethods.Clear();
         }
-    }    
+    }
 }

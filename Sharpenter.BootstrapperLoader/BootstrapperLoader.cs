@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
 using Sharpenter.BootstrapperLoader.Helpers;
@@ -9,15 +8,13 @@ namespace Sharpenter.BootstrapperLoader
 {
     public class BootstrapperLoader
     {
-        private readonly Func<Type, object> _instanceCreator;
         private List<object> _bootstrappers;
 
         internal LoaderConfig Config { get; set; }
 
-        internal BootstrapperLoader(LoaderConfig config, Func<Type, object> instanceCreator)
+        internal BootstrapperLoader(LoaderConfig config)
         {
             Config = config;
-            _instanceCreator = instanceCreator;
         }
 
         internal void Initialize()
@@ -32,7 +29,7 @@ namespace Sharpenter.BootstrapperLoader
             _bootstrappers = assembliesWithBootstrapper
                 .SelectMany(a => a.GetTypes()
                                   .Where(t => t.Name == Config.BootstrapperClassName)
-                                  .Select(_instanceCreator))
+                                  .Select(Config.InstanceCreator))
                                   .ToList();
         }
 
