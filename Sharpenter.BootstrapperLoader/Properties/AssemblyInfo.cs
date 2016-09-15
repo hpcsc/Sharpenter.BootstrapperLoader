@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Sharpenter.BootstrapperLoader")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A simple library to load and execute bootstrapper classes in referenced dlls by convention")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("David Nguyen")]
 [assembly: AssemblyProduct("Sharpenter.BootstrapperLoader")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
