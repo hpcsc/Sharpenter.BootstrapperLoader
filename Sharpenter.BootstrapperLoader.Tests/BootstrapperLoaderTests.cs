@@ -20,28 +20,23 @@ namespace Sharpenter.BootstrapperLoader.Tests
 
         public class Bootstrapper
         {
-            public virtual void ConfigureContainer(ContainerBuilder container)
-            {
+            public virtual void ConfigureContainer(ContainerBuilder container) { }
 
-            }
-
-            public virtual void Configure(IFirstDependency first, ISecondDependency second)
-            {
-                
-            }
+            public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
         }
 
         public class SomeBootstrapper
         {
-            public virtual void SomeConfigureContainer(ContainerBuilder container)
-            {
+            public virtual void SomeConfigureContainer(ContainerBuilder container) { }
 
-            }
+            public virtual void SomeConfigure(IFirstDependency first, ISecondDependency second) { }
+        }
 
-            public virtual void SomeConfigure(IFirstDependency first, ISecondDependency second)
-            {
+        public class ThirdBootstrapper
+        {
+            public virtual void Configure() { }
 
-            }
+            public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
         }
 
         private static BootstrapperLoader _subject;
@@ -239,6 +234,31 @@ namespace Sharpenter.BootstrapperLoader.Tests
                         b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()));
 
             private static Mock<Bootstrapper> _bootstrapperMock;
+        }
+
+        public class When_trigger_configure_without_service_locator
+        {
+            private Establish context = () =>
+            {
+                var testDll = Assembly.GetExecutingAssembly();
+                _bootstrapperMock = new Mock<ThirdBootstrapper>();
+                _subject = new LoaderBuilder()
+                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
+                    .ForClass()
+                        .WithName("ThirdBootstrapper")
+                    .Build();
+            };
+
+            private Because of = () => _subject.TriggerConfigure();
+
+            private It should_trigger_only_configure_methods_without_parameters = () =>
+            {
+                _bootstrapperMock.Verify(b => b.Configure());
+                _bootstrapperMock.Verify(b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()), Times.Never);
+            };
+
+            private static Mock<ThirdBootstrapper> _bootstrapperMock;
         }
     }
 }

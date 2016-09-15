@@ -5,7 +5,7 @@ A simple library to load and execute bootstrapper classes in referenced dlls by 
 
 [![alt Build Status](https://ci.appveyor.com/api/projects/status/github/hpcsc/Sharpenter.BootstrapperLoader?branch=master&retina=true "Build Status")](https://ci.appveyor.com/project/hpcsc87/Sharpenter-BootstrapperLoader)
 
-## Usage
+## Usage Example
 
 This library should be configured and called during the application starts up.
 
@@ -39,7 +39,8 @@ public class Bootstrapper
         builder.RegisterType<SomeRepository>().As<ISomeRepository>();
     }
 
-    public void Configure()
+    //Configure can have any number of dependencies injected, as long as those dependencies are already registered with IoC container
+    public void Configure(ISomeDependency dependency)
     {
         //Any initialization
     }
@@ -72,7 +73,7 @@ public class Startup
 
         //...
     }
-
+     
     public void Configure()
     {
         //Need to pass in wrapper AutofacServiceLocator from `Autofac.Extras.CommonServiceLocator` since the project is using CommonServiceLocator to abstract away all IoC container details
@@ -136,3 +137,23 @@ You can also create new Assembly Provider class, to customize the source of asse
 - FileSystemAssemblyProvider
 - InMemoryAssemblyProvider
 ```
+
+## Trigger bootstrapper from root project
+
+`BootstrapperLoader` provides 2 methods to trigger methods in sub-projects `Bootstrapper` class:
+
+- `TriggerConfigureContainer(object container)`
+
+When this method is called, it will look for methods (by default having name `ConfigureContainer`) in `Bootstrapper` classes that do IoC registration in sub-projects and invoke those, passing in object parameter. Since there's no common standard on how different IoC container should do registration, it assumes its object parameter is a container in your DI framework. So in theory, you can pass in any object of your choice, as long as your `Bootstrapper` classes in sub-projects know how to handle it. Although as the name suggests, it should be used for IoC configuration most of the time
+
+- `TriggerConfigure(IServiceLocator serviceLocator = null)`
+
+This method is triggered when it's the right time to do any non-IoC configuration/initialization (.e.g. AutoMapper setting up). It can be called with or without `IServiceLocator` (an interface in `CommonServiceLocator` library)
+
+This method takes `IServiceLocator` as its parameter to allow `Configure` method in `Bootstrapper` classes to take in any number of dependencies (as long as those dependencies are registered with IoC container). It works in the same way with `Startup.Configure` in ASP.NET Core
+
+`IServiceLocator` is used here to ensure this library is not dependent on any specific IoC container. The downside is that your project will need to use an adapter library that implements `CommonServiceLocator` for your DI framework (.e.g. for `Autofac`, it's `Autofac.Extras.CommonServiceLocator`) for this triggering  
+
+When it's called without `IServiceLocator` parameter, it will look for only `Configure()` method (without any parameter) in Bootstrapper classes
+
+This method is independent from `TriggerConfigureContainer` method above. So your project can choose to use one, or the other, or both.
