@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Sharpenter.BootstrapperLoader.Helpers;
 
 namespace Sharpenter.BootstrapperLoader.Internal
 {
@@ -12,7 +13,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
 
         private readonly Func<bool> AlwaysCall = () => true;
 
-        internal Func<Type, object> InstanceCreator { get; set; }
+        internal ICreateObject InstanceCreator { get; set; }
         internal string BootstrapperClassName { get; set; }
         internal string ConfigureContainerMethodName { get; set; }
         internal Dictionary<string, Func<bool>> ConfigureMethods { get; set; }
@@ -27,7 +28,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
                 {ConfigureDefaultMethodName, AlwaysCall}
             };
 
-            InstanceCreator = Activator.CreateInstance;
+            InstanceCreator = new ActivatorCreator();
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
         }
 

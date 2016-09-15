@@ -31,7 +31,7 @@ namespace Sharpenter.BootstrapperLoader
             _bootstrappers = assembliesWithBootstrapper
                 .SelectMany(a => a.GetTypes()
                                   .Where(t => t.Name == Config.BootstrapperClassName)
-                                  .Select(Config.InstanceCreator))
+                                  .Select(Config.InstanceCreator.Create))
                                   .ToList();
         }
 

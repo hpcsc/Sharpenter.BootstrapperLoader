@@ -5,6 +5,7 @@ using Autofac.Extras.CommonServiceLocator;
 using Machine.Specifications;
 using Moq;
 using Sharpenter.BootstrapperLoader.Builder;
+using Sharpenter.BootstrapperLoader.Helpers;
 using It = Machine.Specifications.It;
 
 namespace Sharpenter.BootstrapperLoader.Tests
@@ -46,6 +47,11 @@ namespace Sharpenter.BootstrapperLoader.Tests
             _containerBuilder = new ContainerBuilder();
         };
 
+        private static ICreateObject MockInstanceCreator(object instance)
+        {
+            return new FakeCreator(instance);
+        }
+
         public class With_default_method_name_configuration
         {
             private Establish context = () =>
@@ -54,7 +60,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 _bootstrapperMock = new Mock<Bootstrapper>();
                 _subject = new LoaderBuilder()
                         .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
-                        .UseInstanceCreator(type => _bootstrapperMock.Object)
+                        .UseInstanceCreator(MockInstanceCreator(_bootstrapperMock.Object))
                         .Build();
             };
 
@@ -117,7 +123,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<SomeBootstrapper>();
                 _subject = new LoaderBuilder()
-                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .UseInstanceCreator(MockInstanceCreator(_bootstrapperMock.Object))
                     .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                     .ForClass()
                         .WithName("SomeBootstrapper")
@@ -187,7 +193,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<Bootstrapper>();
                 _subject = new LoaderBuilder()
-                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .UseInstanceCreator(MockInstanceCreator(_bootstrapperMock.Object))
                     .Use(new InMemoryAssemblyProvider(() => new[] {testDll}))
                     .ForClass()
                         .Methods()
@@ -217,7 +223,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<Bootstrapper>();
                 _subject = new LoaderBuilder()
-                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .UseInstanceCreator(MockInstanceCreator(_bootstrapperMock.Object))
                     .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                     .ForClass()
                         .Methods()
@@ -243,7 +249,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 var testDll = Assembly.GetExecutingAssembly();
                 _bootstrapperMock = new Mock<ThirdBootstrapper>();
                 _subject = new LoaderBuilder()
-                    .UseInstanceCreator(type => _bootstrapperMock.Object)
+                    .UseInstanceCreator(MockInstanceCreator(_bootstrapperMock.Object))
                     .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                     .ForClass()
                         .WithName("ThirdBootstrapper")

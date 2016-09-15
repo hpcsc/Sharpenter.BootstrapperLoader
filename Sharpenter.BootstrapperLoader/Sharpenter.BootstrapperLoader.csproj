@@ -49,10 +49,13 @@
     <Compile Include="Builder\LoaderBuilderBase.cs" />
     <Compile Include="Builder\ForClassSyntax.cs" />
     <Compile Include="Builder\MethodsSyntax.cs" />
-    <Compile Include="FileSystemAssemblyProvider.cs" />
+    <Compile Include="Helpers\ActivatorCreator.cs" />
+    <Compile Include="Helpers\FakeCreator.cs" />
+    <Compile Include="Helpers\FileSystemAssemblyProvider.cs" />
     <Compile Include="Helpers\MethodInfoExtensions.cs" />
-    <Compile Include="IAssemblyProvider.cs" />
-    <Compile Include="InMemoryAssemblyProvider.cs" />
+    <Compile Include="Helpers\IAssemblyProvider.cs" />
+    <Compile Include="Helpers\ICreateObject.cs" />
+    <Compile Include="Helpers\InMemoryAssemblyProvider.cs" />
     <Compile Include="Internal\LoaderConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using Machine.Specifications;
 using Moq;
 using Sharpenter.BootstrapperLoader.Builder;
+using Sharpenter.BootstrapperLoader.Helpers;
 using It = Machine.Specifications.It;
 
 namespace Sharpenter.BootstrapperLoader.Tests.Builder
