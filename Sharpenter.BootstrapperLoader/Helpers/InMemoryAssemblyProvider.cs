@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Sharpenter.BootstrapperLoader
+namespace Sharpenter.BootstrapperLoader.Helpers
 {
     public class InMemoryAssemblyProvider : IAssemblyProvider
     {
