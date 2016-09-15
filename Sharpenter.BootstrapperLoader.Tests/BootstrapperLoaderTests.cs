@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using Autofac.Extras.CommonServiceLocator;
@@ -47,7 +48,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
             _containerBuilder = new ContainerBuilder();
         };
 
-        private static ICreateObject MockInstanceCreator(object instance)
+        private static IAmInstanceCreator MockInstanceCreator(object instance)
         {
             return new FakeCreator(instance);
         }
@@ -184,6 +185,27 @@ namespace Sharpenter.BootstrapperLoader.Tests
             }
             
             private static Mock<SomeBootstrapper> _bootstrapperMock;
+        }
+
+        public class When_created_and_initialized
+        {
+            private Establish context = () =>
+            {
+                _testDll = Assembly.GetExecutingAssembly();
+            };
+
+            private Because of = () => _subject = 
+                new LoaderBuilder()
+                    .Use(new InMemoryAssemblyProvider(() => new[] { _testDll }))
+                    .Build();
+
+            private It should_create_bootstrapper_using_default_constructor = () =>
+            {
+                _subject.Bootstrappers.Count.ShouldEqual(1);
+                _subject.Bootstrappers.First().GetType().FullName.ShouldEqual("Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests+Bootstrapper");
+            };
+
+            private static Assembly _testDll;
         }
 
         public class When_configure_method_condition_returns_false

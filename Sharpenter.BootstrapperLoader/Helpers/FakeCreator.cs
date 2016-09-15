@@ -2,7 +2,7 @@
 
 namespace Sharpenter.BootstrapperLoader.Helpers
 {
-    internal class FakeCreator : ICreateObject
+    internal class FakeCreator : IAmInstanceCreator
     {
         private readonly object _instance;
 

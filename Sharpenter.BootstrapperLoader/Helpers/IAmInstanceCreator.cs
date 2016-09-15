@@ -2,7 +2,7 @@
 
 namespace Sharpenter.BootstrapperLoader.Helpers
 {
-    internal interface ICreateObject
+    internal interface IAmInstanceCreator
     {
         object Create(Type type);
     }

@@ -13,7 +13,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
 
         private readonly Func<bool> AlwaysCall = () => true;
 
-        internal ICreateObject InstanceCreator { get; set; }
+        internal IAmInstanceCreator InstanceCreator { get; set; }
         internal string BootstrapperClassName { get; set; }
         internal string ConfigureContainerMethodName { get; set; }
         internal Dictionary<string, Func<bool>> ConfigureMethods { get; set; }
@@ -28,7 +28,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
                 {ConfigureDefaultMethodName, AlwaysCall}
             };
 
-            InstanceCreator = new ActivatorCreator();
+            InstanceCreator = new ExpressionCreator();
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
         }
 

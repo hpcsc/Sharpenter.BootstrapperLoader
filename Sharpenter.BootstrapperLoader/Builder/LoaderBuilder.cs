@@ -28,7 +28,7 @@ namespace Sharpenter.BootstrapperLoader.Builder
             return new ForClassSyntax(Config);
         }
 
-        internal LoaderBuilder UseInstanceCreator(ICreateObject instanceCreator)
+        internal LoaderBuilder UseInstanceCreator(IAmInstanceCreator instanceCreator)
         {
             Config.InstanceCreator = instanceCreator;
 
