@@ -10,7 +10,7 @@ namespace Sharpenter.BootstrapperLoader
 {
     public class BootstrapperLoader
     {
-        private List<object> _bootstrappers;
+        internal List<object> Bootstrappers { get; private set; }
 
         internal LoaderConfig Config { get; set; }
 
@@ -28,7 +28,7 @@ namespace Sharpenter.BootstrapperLoader
                     a => a.GetTypes()
                           .FirstOrDefault(t => t.Name == Config.BootstrapperClassName) != null);
 
-            _bootstrappers = assembliesWithBootstrapper
+            Bootstrappers = assembliesWithBootstrapper
                 .SelectMany(a => a.GetTypes()
                                   .Where(t => t.Name == Config.BootstrapperClassName)
                                   .Select(Config.InstanceCreator.Create))
@@ -40,7 +40,7 @@ namespace Sharpenter.BootstrapperLoader
             var configureContainerParamTypes = new [] { container.GetType() };
             var configureContainerParam = new[] {container};
 
-            _bootstrappers.ForEach(bootstrapper => 
+            Bootstrappers.ForEach(bootstrapper => 
                 bootstrapper.GetType()
                             .GetMethod(Config.ConfigureContainerMethodName, configureContainerParamTypes)
                             ?.Invoke(bootstrapper, configureContainerParam));
@@ -48,7 +48,7 @@ namespace Sharpenter.BootstrapperLoader
 
         public void TriggerConfigure(IServiceLocator serviceLocator = null)
         {
-            _bootstrappers.ForEach(bootstrapper =>
+            Bootstrappers.ForEach(bootstrapper =>
             {
                 Config.ConfigureMethods
                        .Where(c => c.Value())
