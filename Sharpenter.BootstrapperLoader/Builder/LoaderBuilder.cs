@@ -1,4 +1,5 @@
-﻿using Sharpenter.BootstrapperLoader.Internal;
+﻿using System;
+using Sharpenter.BootstrapperLoader.Internal;
 
 namespace Sharpenter.BootstrapperLoader.Builder
 {
@@ -24,6 +25,13 @@ namespace Sharpenter.BootstrapperLoader.Builder
         public ForClassSyntax ForClass()
         {
             return new ForClassSyntax(Config);
+        }
+
+        internal LoaderBuilder UseInstanceCreator(Func<Type, object> instanceCreator)
+        {
+            Config.InstanceCreator = instanceCreator;
+
+            return this;
         }
     }
 }
