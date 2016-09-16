@@ -8,7 +8,7 @@ Write-Host "==========      Building   ===================="
 Write-Host "==============================================="
 Write-Host "==========      Packaging   ==================="
 
-Copy-Item ".\deploy\Sharpenter.BootstrapperLoader.nuspec" -Destination ".\Sharpenter.BootstrapperLoader"
+Copy-Item ".\deployment\Sharpenter.BootstrapperLoader.nuspec" -Destination ".\Sharpenter.BootstrapperLoader"
 
 cd ./Sharpenter.BootstrapperLoader
 
@@ -16,4 +16,4 @@ Invoke-Expression "..\tools\nuget.exe pack Sharpenter.BootstrapperLoader.csproj 
 
 Remove-Item ".\Sharpenter.BootstrapperLoader.nuspec"
 
-cd ../deploy
+cd ../deployment
