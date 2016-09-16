@@ -52,18 +52,6 @@ namespace Sharpenter.BootstrapperLoader.Tests.Builder
                 () => _loader.Config.InstanceCreator.ShouldBeOfExactType<ExpressionCreator<string>>();
         }
 
-        public class When_config_configure_container_name_using_builder
-        {
-            private Because of = () => _loader = new LoaderBuilder()
-                                                        .Use(_assemblyProviderMock.Object)
-                                                        .ForClass()
-                                                            .ConfigureContainerWith("SomeConfigureContainer")
-                                                        .Build();
-
-            private It should_initialize_loader_with_that_configure_container_method_name =
-                () => _loader.Config.ConfigureContainerMethodName.ShouldEqual("SomeConfigureContainer");            
-        }
-
         public class When_clearing_all_config_method_configurations
         {
             private Because of = () => _loader = new LoaderBuilder()

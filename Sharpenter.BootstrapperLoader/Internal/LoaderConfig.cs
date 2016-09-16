@@ -7,22 +7,19 @@ namespace Sharpenter.BootstrapperLoader.Internal
 {
     internal class LoaderConfig
     {
-        private const string BootstrapperDefaultClassName = "Bootstrapper";
-        private const string ConfigureContainerDefaultMethodName = "ConfigureContainer";
+        private const string BootstrapperDefaultClassName = "Bootstrapper";        
         private const string ConfigureDefaultMethodName = "Configure";
 
         private readonly Func<bool> AlwaysCall = () => true;
 
         internal IAmInstanceCreator InstanceCreator { get; set; }
         internal string BootstrapperClassName { get; set; }
-        internal string ConfigureContainerMethodName { get; set; }
         internal Dictionary<string, Func<bool>> ConfigureMethods { get; set; }
         internal IAssemblyProvider AssemblyProvider { get; set; }
 
         internal LoaderConfig()
         {
             BootstrapperClassName = BootstrapperDefaultClassName;
-            ConfigureContainerMethodName = ConfigureContainerDefaultMethodName;
             ConfigureMethods = new Dictionary<string, Func<bool>>
             {
                 {ConfigureDefaultMethodName, AlwaysCall}
