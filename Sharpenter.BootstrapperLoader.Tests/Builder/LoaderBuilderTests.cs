@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using System.CodeDom;
+using Machine.Specifications;
 using Moq;
 using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
@@ -37,6 +38,18 @@ namespace Sharpenter.BootstrapperLoader.Tests.Builder
 
             private It should_initialize_loader_with_that_class_name =
                 () => _loader.Config.BootstrapperClassName.ShouldEqual("SomeBootstrapper");            
+        }
+
+        public class When_config_class_constructor_parameters_using_builder
+        {
+            private Because of = () => _loader = new LoaderBuilder()
+                                                        .Use(_assemblyProviderMock.Object)
+                                                        .ForClass()
+                                                            .HasConstructorParameter("some string")
+                                                        .Build();
+
+            private It should_initialize_loader_with_those_constructor_parameters =
+                () => _loader.Config.InstanceCreator.ShouldBeOfExactType<ExpressionCreator<string>>();
         }
 
         public class When_config_configure_container_name_using_builder

@@ -5,6 +5,12 @@ A simple library to load and execute bootstrapper classes in referenced dlls by 
 
 [![alt Build Status](https://ci.appveyor.com/api/projects/status/github/hpcsc/Sharpenter.BootstrapperLoader?branch=master&retina=true "Build Status")](https://ci.appveyor.com/project/hpcsc87/Sharpenter-BootstrapperLoader)
 
+## Installation
+
+```
+Install-Package Sharpenter.BootstrapperLoader
+```
+
 ## Usage Example
 
 This library should be configured and called during the application starts up.
@@ -90,6 +96,15 @@ During configuration of `BootstrapperLoader`, it's possible to specify class nam
 _bootstrapperLoader = new LoaderBuilder()
                     .ForClass()
                         .WithName("SomeBootstrapper")
+                    .Build();
+```
+
+or pass some parameter to `Bootstrapper` constructor:
+
+```
+_bootstrapperLoader = new LoaderBuilder()
+                    .ForClass()
+                        .HasConstructorParameter<ISomeDependency>(new SomeDependency())
                     .Build();
 ```
 

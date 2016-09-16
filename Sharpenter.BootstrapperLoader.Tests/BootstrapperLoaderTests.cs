@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Linq;
 using System.Reflection;
 using Autofac;
@@ -39,6 +40,11 @@ namespace Sharpenter.BootstrapperLoader.Tests
             public virtual void Configure() { }
 
             public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
+        }
+
+        public class FourthBootstrapper
+        {
+            public FourthBootstrapper(IFirstDependency dependency) { }
         }
 
         private static BootstrapperLoader _subject;
@@ -203,6 +209,30 @@ namespace Sharpenter.BootstrapperLoader.Tests
             {
                 _subject.Bootstrappers.Count.ShouldEqual(1);
                 _subject.Bootstrappers.First().GetType().FullName.ShouldEqual("Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests+Bootstrapper");
+            };
+
+            private static Assembly _testDll;
+        }
+
+        public class When_constructor_parameter_is_provided
+        {
+            private Establish context = () =>
+            {
+                _testDll = Assembly.GetExecutingAssembly();
+            };
+
+            private Because of = () => _subject =
+                new LoaderBuilder()
+                    .Use(new InMemoryAssemblyProvider(() => new[] { _testDll }))
+                    .ForClass()
+                        .WithName("FourthBootstrapper")
+                        .HasConstructorParameter<IFirstDependency>(new FirstDependency())
+                    .Build();
+
+            private It should_create_bootstrapper_using_constructor_with_that_signature = () =>
+            {
+                _subject.Bootstrappers.Count.ShouldEqual(1);
+                _subject.Bootstrappers.First().GetType().FullName.ShouldEqual("Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests+FourthBootstrapper");
             };
 
             private static Assembly _testDll;

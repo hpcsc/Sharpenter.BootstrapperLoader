@@ -49,7 +49,6 @@
     <Compile Include="Builder\LoaderBuilderBase.cs" />
     <Compile Include="Builder\ForClassSyntax.cs" />
     <Compile Include="Builder\MethodsSyntax.cs" />
-    <Compile Include="Helpers\ActivatorCreator.cs" />
     <Compile Include="Helpers\ExpressionCreator.cs" />
     <Compile Include="Helpers\FakeCreator.cs" />
     <Compile Include="Helpers\FileSystemAssemblyProvider.cs" />
