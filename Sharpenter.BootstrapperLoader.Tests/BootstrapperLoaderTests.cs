@@ -1,9 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using Autofac.Extras.CommonServiceLocator;
 using Machine.Specifications;
 using Moq;
 using Sharpenter.BootstrapperLoader.Builder;
@@ -80,7 +78,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 };
 
                 private Because of =
-                    () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+                    () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
 
                 private It should_invoke_default_class_and_configure_method_with_all_registered_dependencies =
                     () =>
@@ -100,7 +98,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 private Because of =
                     () =>
                         _exception = Catch.Exception(
-                            () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build())));
+                            () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve));
 
                 private It should_throw_resolution_exception = () =>
                 {
@@ -141,7 +139,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 };
 
                 private Because of =
-                    () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+                    () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
 
                 private It should_invoke_correct_class_and_configure_method_with_all_registered_dependencies =
                     () =>
@@ -161,7 +159,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                 private Because of =
                     () =>
                         _exception = Catch.Exception(
-                            () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build())));
+                            () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve));
 
                 private It should_throw_resolution_exception = () =>
                 {
@@ -258,7 +256,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                     .Build();
             };
 
-            private Because of = () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+            private Because of = () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
 
             private It should_not_be_called_when_triggering_loader =
                 () =>
@@ -288,7 +286,7 @@ namespace Sharpenter.BootstrapperLoader.Tests
                     .Build();
             };
 
-            private Because of = () => _subject.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+            private Because of = () => _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
 
             private It should_be_called_when_triggering_loader =
                 () =>

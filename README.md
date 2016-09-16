@@ -82,8 +82,8 @@ public class Startup
      
     public void Configure()
     {
-        //Need to pass in wrapper AutofacServiceLocator from `Autofac.Extras.CommonServiceLocator` since the project is using CommonServiceLocator to abstract away all IoC container details
-        _bootstrapperLoader.TriggerConfigure(new AutofacServiceLocator(_containerBuilder.Build()));
+        //Use Resolve() from Autofac container as service locator
+        _bootstrapperLoader.TriggerConfigure(_containerBuilder.Build().Resolve);
     }
 }
 ```
@@ -152,12 +152,12 @@ You can also create new Assembly Provider class, to customize the source of asse
 
 When this method is called, it will look for methods with specified name in `Bootstrapper` classes in sub-projects and invoke those, passing in provided parameter. Most of the time, this method should be used to trigger IoC registration in sub-projects, passing in IoC container from root project as parameter. Although with its general signature, it can be used for other purpose.
 
-- `TriggerConfigure(IServiceLocator serviceLocator = null)`
+- `TriggerConfigure(Func<Type, object> serviceLocator = null)`
 
-This method is triggered when it's the right time to do any non-IoC configuration/initialization (.e.g. AutoMapper setting up). It can be called with or without `IServiceLocator` (an interface in `CommonServiceLocator` library)
+This method is triggered when it's the right time to do any non-IoC configuration/initialization (.e.g. AutoMapper setting up). It can be called with or without `serviceLocator` parameter
 
-This method takes `IServiceLocator` as its parameter to allow `Configure` method in `Bootstrapper` classes to take in any number of dependencies (as long as those dependencies are registered with IoC container). It works in the same way with `Startup.Configure` in ASP.NET Core
+This method takes `Func<Type, object>` as its parameter to allow `Configure` method in `Bootstrapper` classes to take in any number of dependencies (as long as those dependencies can be resolved using serviceLocator func). It works in the same way with `Startup.Configure` in ASP.NET Core
 
-`IServiceLocator` is used here to ensure this library is not dependent on any specific IoC container. The downside is that your project will need to use an adapter library that implements `CommonServiceLocator` for your DI framework (.e.g. for `Autofac`, it's `Autofac.Extras.CommonServiceLocator`) for this triggering  
+`Func<Type, object>` is used here to ensure this library is not dependent on any specific IoC container. Most IoC container should support a method with this signature (.e.g. in `Autofac`, it's `Resolve()` method) 
 
-When it's called without `IServiceLocator` parameter, it will look for only `Configure()` method (without any parameter) in Bootstrapper classes
+When it's called without `serviceLocator` parameter, it will look for only `Configure()` method (without any parameter) in Bootstrapper classes
