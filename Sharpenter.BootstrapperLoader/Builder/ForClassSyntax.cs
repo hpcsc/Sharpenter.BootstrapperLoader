@@ -1,4 +1,6 @@
-﻿using Sharpenter.BootstrapperLoader.Internal;
+﻿using System;
+using Sharpenter.BootstrapperLoader.Helpers;
+using Sharpenter.BootstrapperLoader.Internal;
 
 namespace Sharpenter.BootstrapperLoader.Builder
 {
@@ -12,6 +14,13 @@ namespace Sharpenter.BootstrapperLoader.Builder
         public ForClassSyntax WithName(string bootstrapperClassName)
         {
             Config.BootstrapperClassName = bootstrapperClassName;
+
+            return this;
+        }
+
+        public ForClassSyntax HasConstructorParameter<TArg>(TArg parameter)
+        {
+            Config.InstanceCreator = new ExpressionCreator<TArg>(parameter);
 
             return this;
         }
