@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E9A5691D
 		build.ps1 = build.ps1
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{DDE935A4-6E4E-4B2A-80BA-23964E04177D}"
+	ProjectSection(SolutionItems) = preProject
+		deployment\package.ps1 = deployment\package.ps1
+		deployment\Sharpenter.BootstrapperLoader.nuspec = deployment\Sharpenter.BootstrapperLoader.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
