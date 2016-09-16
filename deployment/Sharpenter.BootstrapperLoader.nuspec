@@ -10,7 +10,6 @@
     <projectUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
-    <releaseNotes>Add support for passing parameter to Bootstrapper constructor</releaseNotes>
     <copyright>Copyright 2016</copyright>
     <tags>Bootstrapper Loader Startup</tags>
   </metadata>
