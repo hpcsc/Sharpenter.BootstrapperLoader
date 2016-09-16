@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Practices.ServiceLocation;
 using Sharpenter.BootstrapperLoader.Helpers;
 using Sharpenter.BootstrapperLoader.Internal;
 using System;
@@ -43,7 +42,7 @@ namespace Sharpenter.BootstrapperLoader
                             ?.Invoke(bootstrapper, new object[] { parameter }));
         }
 
-        public void TriggerConfigure(IServiceLocator serviceLocator = null)
+        public void TriggerConfigure(Func<Type, object> serviceLocator = null)
         {
             Bootstrappers.ForEach(bootstrapper =>
             {
@@ -56,7 +55,7 @@ namespace Sharpenter.BootstrapperLoader
             });
         }
 
-        private static MethodInfo GetMethodInfoByName(Type bootstrapperType, string methodName, IServiceLocator serviceLocator)
+        private static MethodInfo GetMethodInfoByName(Type bootstrapperType, string methodName, Func<Type, object> serviceLocator)
         {
             return serviceLocator == null
                 ? bootstrapperType.GetMethod(methodName, new Type[0])
