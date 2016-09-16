@@ -75,7 +75,7 @@ public class Startup
         _containerBuilder = new ContainerBuilder();
         //...
 
-        _bootstrapperLoader.TriggerConfigureContainer(_containerBuilder);
+        _bootstrapperLoader.Trigger("ConfigureContainer", _containerBuilder);
 
         //...
     }
@@ -105,15 +105,6 @@ or pass some parameter to `Bootstrapper` constructor:
 _bootstrapperLoader = new LoaderBuilder()
                     .ForClass()
                         .HasConstructorParameter<ISomeDependency>(new SomeDependency())
-                    .Build();
-```
-
-or  configure container method to look for (default is ConfigureContainer):
-
-```
-_bootstrapperLoader = new LoaderBuilder()
-                    .ForClass()
-                        .ConfigureContainerWith("SomeConfigureContainerMethod")
                     .Build();
 ```
 
@@ -157,9 +148,9 @@ You can also create new Assembly Provider class, to customize the source of asse
 
 `BootstrapperLoader` provides 2 methods to trigger methods in sub-projects `Bootstrapper` class:
 
-- `TriggerConfigureContainer(object container)`
+- `Trigger<TArg>(string methodName, TArg parameter)`
 
-When this method is called, it will look for methods (by default having name `ConfigureContainer`) in `Bootstrapper` classes that do IoC registration in sub-projects and invoke those, passing in object parameter. Since there's no common standard on how different IoC container should do registration, it assumes its object parameter is a container in your DI framework. So in theory, you can pass in any object of your choice, as long as your `Bootstrapper` classes in sub-projects know how to handle it. Although as the name suggests, it should be used for IoC configuration most of the time
+When this method is called, it will look for methods with specified name in `Bootstrapper` classes in sub-projects and invoke those, passing in provided parameter. Most of the time, this method should be used to trigger IoC registration in sub-projects, passing in IoC container from root project as parameter. Although with its general signature, it can be used for other purpose.
 
 - `TriggerConfigure(IServiceLocator serviceLocator = null)`
 
@@ -170,5 +161,3 @@ This method takes `IServiceLocator` as its parameter to allow `Configure` method
 `IServiceLocator` is used here to ensure this library is not dependent on any specific IoC container. The downside is that your project will need to use an adapter library that implements `CommonServiceLocator` for your DI framework (.e.g. for `Autofac`, it's `Autofac.Extras.CommonServiceLocator`) for this triggering  
 
 When it's called without `IServiceLocator` parameter, it will look for only `Configure()` method (without any parameter) in Bootstrapper classes
-
-This method is independent from `TriggerConfigureContainer` method above. So your project can choose to use one, or the other, or both.

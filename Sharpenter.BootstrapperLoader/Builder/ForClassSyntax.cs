@@ -25,13 +25,6 @@ namespace Sharpenter.BootstrapperLoader.Builder
             return this;
         }
 
-        public ForClassSyntax ConfigureContainerWith(string configureContainerMethodName)
-        {
-            Config.ConfigureContainerMethodName = configureContainerMethodName;
-
-            return this;
-        }
-
         public MethodsSyntax Methods()
         {
             return new MethodsSyntax(Config);
