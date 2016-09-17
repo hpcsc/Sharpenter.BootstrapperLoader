@@ -7,6 +7,8 @@ A simple library to load and execute bootstrapper classes in referenced dlls by 
 
 ## Installation
 
+[![NuGet](https://img.shields.io/nuget/v/Sharpenter.BootstrapperLoader.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Sharpenter.BootstrapperLoader/)
+
 ```
 Install-Package Sharpenter.BootstrapperLoader
 ```
