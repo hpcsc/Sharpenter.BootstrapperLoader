@@ -8,6 +8,7 @@
     <owners>$author$</owners>
     <licenseUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader</projectUrl>
+    <iconUrl>https://www.dropbox.com/s/cqqpikckgbj7zjz/Sharpenter.png?dl=0</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>Copyright 2016</copyright>
