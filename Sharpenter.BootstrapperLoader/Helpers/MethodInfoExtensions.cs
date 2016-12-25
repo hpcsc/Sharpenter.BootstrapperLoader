@@ -20,7 +20,11 @@ namespace Sharpenter.BootstrapperLoader.Helpers
                 catch (Exception ex)
                 {
                     throw new Exception(
-                        $"Could not resolve a service of type '{parameterInfo.ParameterType.FullName}' for the parameter '{parameterInfo.Name}' of method '{configureMethod.Name}' on type '{configureMethod.DeclaringType.FullName}'.",
+                        string.Format("Could not resolve a service of type '{0}' for the parameter '{1}' of method '{2}' on type '{3}'.", 
+                                        parameterInfo.ParameterType.FullName,
+                                        parameterInfo.Name,
+                                        configureMethod.Name,
+                                        configureMethod.DeclaringType.FullName),
                         ex);
                 }
             }

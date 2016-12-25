@@ -27,17 +27,22 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release 4.5|Any CPU = Release 4.5|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release 4.5|Any CPU.ActiveCfg = Release 4.5|Any CPU
+		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release 4.5|Any CPU.Build.0 = Release 4.5|Any CPU
+		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release|Any CPU.ActiveCfg = Release 4.5|Any CPU
+		{6BDCAA00-1538-49DF-8C00-E393969D119F}.Release|Any CPU.Build.0 = Release 4.5|Any CPU
 		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release 4.5|Any CPU.ActiveCfg = Release 4.5|Any CPU
+		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release 4.5|Any CPU.Build.0 = Release 4.5|Any CPU
+		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release|Any CPU.ActiveCfg = Release 4.5|Any CPU
+		{BEC1FCDC-BDF6-45D6-8DCD-7641CF44E099}.Release|Any CPU.Build.0 = Release 4.5|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
