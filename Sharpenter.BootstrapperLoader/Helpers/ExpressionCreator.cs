@@ -20,7 +20,7 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         protected static ConstructorInfo FindDefaultConstructorInfo(Type type)
         {
             var defaultConstructor = type.GetConstructor(new Type[0]);
-            if (defaultConstructor == null) throw new ArgumentException($"Constructor with given signature or default constructor not found in type {type.FullName}");
+            if (defaultConstructor == null) throw new ArgumentException(string.Format("Constructor with given signature or default constructor not found in type {0}", type.FullName));
 
             return defaultConstructor;
         }

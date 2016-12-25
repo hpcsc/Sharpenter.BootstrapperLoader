@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Sharpenter.BootstrapperLoader.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Sharpenter.BootstrapperLoader.Helpers;
 
 namespace Sharpenter.BootstrapperLoader.Internal
 {
@@ -32,7 +32,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
         internal void AddConfigureMethod(string methodName)
         {
             if (ConfigureMethods.ContainsKey(methodName))
-                throw new ArgumentException($"Duplication configureation for method '{methodName}' detected");
+                throw new ArgumentException(string.Format("Duplication configureation for method '{0}' detected", methodName));
 
             ConfigureMethods[methodName] = AlwaysCall;
         }
@@ -40,7 +40,7 @@ namespace Sharpenter.BootstrapperLoader.Internal
         internal void UpdateMethodCallCondition(string name, Func<bool> condition)
         {
             if (!ConfigureMethods.ContainsKey(name))
-                throw new ArgumentException($"Configuration for method '{name} not found");
+                throw new ArgumentException(string.Format("Configuration for method '{0} not found", name));
 
             ConfigureMethods[name] = condition;
         }

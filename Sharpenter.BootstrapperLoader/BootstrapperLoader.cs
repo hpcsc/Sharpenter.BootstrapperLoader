@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using Sharpenter.BootstrapperLoader.Helpers;
+﻿using Sharpenter.BootstrapperLoader.Helpers;
 using Sharpenter.BootstrapperLoader.Internal;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Sharpenter.BootstrapperLoader
 {
@@ -36,10 +36,12 @@ namespace Sharpenter.BootstrapperLoader
 
         public void Trigger<TArg>(string methodName, TArg parameter)
         {
-            Bootstrappers.ForEach(bootstrapper => 
-                bootstrapper.GetType()
-                            .GetMethod(methodName, new[] {typeof(TArg)})
-                            ?.Invoke(bootstrapper, new object[] { parameter }));
+            Bootstrappers.ForEach(bootstrapper =>
+                ExecuteIfNotNull(
+                    bootstrapper.GetType()
+                            .GetMethod(methodName, new[] {typeof(TArg)}),
+                    methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
+                );
         }
 
         public void TriggerConfigure(Func<Type, object> serviceLocator = null)
@@ -50,8 +52,10 @@ namespace Sharpenter.BootstrapperLoader
                        .Where(c => c.Value())
                        .ToList()
                        .ForEach(methodConfiguration => 
-                                    GetMethodInfoByName(bootstrapper.GetType(), methodConfiguration.Key, serviceLocator)
-                                                ?.InvokeWithDynamicallyResolvedParameters(bootstrapper, serviceLocator));
+                                ExecuteIfNotNull(
+                                    GetMethodInfoByName(bootstrapper.GetType(), methodConfiguration.Key, serviceLocator),
+                                    methodInfo => methodInfo.InvokeWithDynamicallyResolvedParameters(bootstrapper, serviceLocator))
+                               );
             });
         }
 
@@ -60,6 +64,14 @@ namespace Sharpenter.BootstrapperLoader
             return serviceLocator == null
                 ? bootstrapperType.GetMethod(methodName, new Type[0])
                 : bootstrapperType.GetMethod(methodName);
+        }
+
+        private static void ExecuteIfNotNull(MethodInfo methodInfo, Action<MethodInfo> action)
+        {
+            if (methodInfo != null)
+            {
+                action(methodInfo);
+            }
         }
     }
 }
