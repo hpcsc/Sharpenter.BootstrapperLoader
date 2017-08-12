@@ -1,50 +1,89 @@
-#tool "nuget:?package=Machine.Specifications.Runner.Console"
-
 using System.Diagnostics;
 using IO = System.IO;
 using System.Linq;
 
 var target = Argument("target", "Default");
-var buildConfiguration = Argument("configuration", "Release");
-var platformTarget = PlatformTarget.MSIL;
+var buildConfiguration = "Release";
+var solutionFile = "Sharpenter.BootstrapperLoader.sln";
+var mainProject = "Sharpenter.BootstrapperLoader";
+var testProject = "Sharpenter.BootstrapperLoader.Tests";
 
-Task("Build")
-  .Does(() =>
+void Build(string targetFramework)
 {
-  NuGetRestore("Sharpenter.BootstrapperLoader.sln");
-  MSBuild("Sharpenter.BootstrapperLoader.sln", new MSBuildSettings {
-    Configuration = buildConfiguration,
-    PlatformTarget = platformTarget
-  });
-});
+  var settings = new DotNetCoreMSBuildSettings()
+                  .SetConfiguration(buildConfiguration)
+                  .SetTargetFramework(targetFramework);
 
-Task("Test")
-  .Does(() =>
-{
-  var binFolders = IO.Directory.GetDirectories(IO.Directory.GetCurrentDirectory(), "*.Tests").SelectMany(d => IO.Directory.GetDirectories(d, "bin"));
-  var testDlls = binFolders.SelectMany(f => IO.Directory.GetFiles(IO.Path.Combine(f, "Release", "net45"), "*.Tests.dll", SearchOption.AllDirectories)).Select(p => "\"" + p + "\"");
-
-  var startInfo = new ProcessStartInfo(IO.Path.Combine(IO.Directory.GetCurrentDirectory(), "tools/Machine.Specifications.Runner.Console/tools/mspec-clr4.exe"))
-  {
-    UseShellExecute = false,
-    RedirectStandardOutput = true,
-    CreateNoWindow = true,
-    Arguments = "--xml=\"./TestResult.xml\" " + string.Join(" ", testDlls)
-  };
-
-  var mspecProcess = Process.Start(startInfo);
-  while (!mspecProcess.StandardOutput.EndOfStream) {
-      string line = mspecProcess.StandardOutput.ReadLine();
-      Console.WriteLine(line);
-  }
-  if (mspecProcess.ExitCode != 0)
-  {
-    throw new CakeException(string.Format("mSpec test failure... exit code: {0}", mspecProcess.ExitCode));
+  DotNetCoreMSBuild(solutionFile, settings);
 }
-    });
 
-    Task("Default")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test");
+void Test(string framework)
+{
+  var settings = new DotNetCoreTestSettings
+  {
+      Configuration = buildConfiguration,
+      Framework = framework
+  };
+  DotNetCoreTest("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", settings);
+}
 
-    RunTarget(target);
+void DeleteIfExists(string project)
+{
+  var binDir = IO.Path.Combine(IO.Directory.GetCurrentDirectory(), project, "bin");
+  if (DirectoryExists(binDir))
+  {
+    DeleteDirectory(binDir, recursive:true);
+  }
+
+  var objDir = IO.Path.Combine(IO.Directory.GetCurrentDirectory(), project, "obj");
+  if (DirectoryExists(objDir))
+  {
+    DeleteDirectory(objDir, recursive:true);
+  }
+}
+
+Task("Clean")
+  .Does(() =>
+  {
+    DeleteIfExists(mainProject);
+    DeleteIfExists(testProject);
+  });
+ 
+Task("Restore")
+  .Does(() => {
+    DotNetCoreRestore(solutionFile);
+  });
+
+Task("BuildNetStandard")
+  .Does(() =>
+  {
+    Build("netstandard2.0");
+  });
+
+Task("BuildNet45")
+  .Does(() =>
+  {
+    Build("net45");
+  });
+
+Task("TestNetStandard")
+  .IsDependentOn("BuildNetStandard")
+  .Does(() =>
+  {
+    Test("netstandard2.0");
+  });
+
+Task("TestNet45")
+  .IsDependentOn("BuildNet45")
+  .Does(() =>
+  {
+    Test("net45");
+  });
+
+Task("Default")
+  .IsDependentOn("Clean")
+  .IsDependentOn("Restore")
+  .IsDependentOn("TestNet45")
+  .IsDependentOn("TestNetStandard");
+
+RunTarget(target);
