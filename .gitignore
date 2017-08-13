@@ -254,3 +254,5 @@ paket-files/
 # CAKE
 tools/*
 !tools/NuGet.exe
+
+.vscode
