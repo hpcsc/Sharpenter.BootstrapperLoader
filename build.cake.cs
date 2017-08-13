@@ -17,16 +17,6 @@ void Build(string targetFramework)
   DotNetCoreMSBuild(solutionFile, settings);
 }
 
-void Test(string framework)
-{
-  var settings = new DotNetCoreTestSettings
-  {
-      Configuration = buildConfiguration,
-      Framework = framework
-  };
-  DotNetCoreTest("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", settings);
-}
-
 void DeleteIfExists(string project)
 {
   var binDir = IO.Path.Combine(IO.Directory.GetCurrentDirectory(), project, "bin");
@@ -60,30 +50,23 @@ Task("BuildNetStandard")
     Build("netstandard2.0");
   });
 
-Task("BuildNet45")
+Task("BuildNet452")
   .Does(() =>
   {
-    Build("net45");
+    Build("net452");
   });
 
-Task("TestNetStandard")
+Task("Test")
   .IsDependentOn("BuildNetStandard")
+  .IsDependentOn("BuildNet452")
   .Does(() =>
   {
-    Test("netstandard2.0");
-  });
-
-Task("TestNet45")
-  .IsDependentOn("BuildNet45")
-  .Does(() =>
-  {
-    Test("net45");
+    DotNetCoreTool("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", "xunit", "-xml TestResult.xml");
   });
 
 Task("Default")
   .IsDependentOn("Clean")
   .IsDependentOn("Restore")
-  .IsDependentOn("TestNet45")
-  .IsDependentOn("TestNetStandard");
+  .IsDependentOn("Test");
 
 RunTarget(target);
