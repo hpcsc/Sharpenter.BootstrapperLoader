@@ -256,3 +256,4 @@ tools/*
 !tools/NuGet.exe
 
 .vscode
+TestResult*
