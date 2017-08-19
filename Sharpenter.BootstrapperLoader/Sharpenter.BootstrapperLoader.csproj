@@ -9,4 +9,14 @@
     <Description>A simple library to load and execute bootstrapper classes in referenced dlls by convention</Description>
     <Copyright>Copyright © 2017 David Nguyen</Copyright>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Sharpenter.BootstrapperLoader</PackageId>
+    <PackageVersion>1.2.3.0</PackageVersion>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>Bootstrapper;Loader;Startup</PackageTags>
+    <PackageLicenseUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/hpcsc/Sharpenter.BootstrapperLoader/master/Sharpenter.png</PackageIconUrl>
+  </PropertyGroup>
 </Project>
