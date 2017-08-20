@@ -5,6 +5,10 @@ A simple library to load and execute bootstrapper classes in referenced dlls by 
 
 [![alt Build Status](https://ci.appveyor.com/api/projects/status/github/hpcsc/Sharpenter.BootstrapperLoader?branch=master&retina=true "Build Status")](https://ci.appveyor.com/project/hpcsc87/Sharpenter-BootstrapperLoader)
 
+## CodeProject article
+
+My article on CodeProject on design and implementation of this library: [https://www.codeproject.com/Articles/1162975/Bootstrapper-Loader-for-Layered-Architecture](https://www.codeproject.com/Articles/1162975/Bootstrapper-Loader-for-Layered-Architecture)
+
 ## Installation
 
 [![NuGet](https://img.shields.io/nuget/v/Sharpenter.BootstrapperLoader.svg?maxAge=2592000?style=flat-square)](https://www.nuget.org/packages/Sharpenter.BootstrapperLoader/)
