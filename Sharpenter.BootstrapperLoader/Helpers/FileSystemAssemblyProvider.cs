@@ -27,7 +27,7 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         {
             try
             {
-                return Assembly.LoadFile(path);
+                return Assembly.LoadFrom(path);
             }
             catch (FileLoadException loadEx)
             { } // The Assembly has already been loaded.
