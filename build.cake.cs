@@ -28,11 +28,13 @@ Task("Clean")
   });
  
 Task("Restore")
+  .IsDependentOn("Clean")
   .Does(() => {
     DotNetCoreRestore(solutionFile);
   });
 
 Task("Build")
+  .IsDependentOn("Restore")
   .Does(() =>
   {
     var settings = new DotNetCoreBuildSettings
@@ -51,8 +53,6 @@ Task("Test")
   });
 
 Task("Default")
-  .IsDependentOn("Clean")
-  .IsDependentOn("Restore")
   .IsDependentOn("Test");
 
 RunTarget(target);
