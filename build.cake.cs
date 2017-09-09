@@ -46,13 +46,12 @@ Task("Build")
   });
 
 Task("Test")
-  .IsDependentOn("Build")
   .Does(() =>
   {
     DotNetCoreTool("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", "xunit", "-xml TestResult.xml");
   });
 
 Task("Default")
-  .IsDependentOn("Test");
+  .IsDependentOn("Build");
 
 RunTarget(target);
