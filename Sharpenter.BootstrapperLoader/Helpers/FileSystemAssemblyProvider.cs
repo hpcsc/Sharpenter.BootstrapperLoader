@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
+using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.DependencyModel.Resolution;
 
 namespace Sharpenter.BootstrapperLoader.Helpers
 {
@@ -27,13 +31,22 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         {
             try
             {
+                #if NET462
                 return Assembly.LoadFrom(path);
+                #else
+                using (var dynamicContext = new AssemblyResolver(path))
+                {
+                    return dynamicContext.Assembly;
+                }
+                #endif
             }
+            #pragma warning disable 0168
             catch (FileLoadException loadEx)
             { } // The Assembly has already been loaded.
             catch (BadImageFormatException imgEx)
             { } // If a BadImageFormatException exception is thrown, the file is not an assembly.
-
+            #pragma warning restore 0168
+            
             return null;
         }
     }
