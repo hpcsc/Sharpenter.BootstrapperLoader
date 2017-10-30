@@ -1,6 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpenter.BootstrapperLoader", "Sharpenter.BootstrapperLoader\Sharpenter.BootstrapperLoader.csproj", "{F2A5A35B-2C99-46C3-9B1B-9CB5819A77D5}"
 EndProject
@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 		deployment\package.ps1 = deployment\package.ps1
 		deployment\Sharpenter.BootstrapperLoader.nuspec = deployment\Sharpenter.BootstrapperLoader.nuspec
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpenter.BootstrapperLoader.Tests.DummyAssembly", "Sharpenter.BootstrapperLoader.Tests.DummyAssembly\Sharpenter.BootstrapperLoader.Tests.DummyAssembly.csproj", "{B0BF7515-733F-4431-9313-B1F072CDDF3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,18 @@ Global
 		{F3B59549-2E7C-4B52-AFEE-3F75AB580333}.Release|x64.Build.0 = Release|Any CPU
 		{F3B59549-2E7C-4B52-AFEE-3F75AB580333}.Release|x86.ActiveCfg = Release|Any CPU
 		{F3B59549-2E7C-4B52-AFEE-3F75AB580333}.Release|x86.Build.0 = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|x64.Build.0 = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +78,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F2A5A35B-2C99-46C3-9B1B-9CB5819A77D5} = {D27C1318-3FC4-438D-9BDD-FFA5E78FCEA8}
 		{F3B59549-2E7C-4B52-AFEE-3F75AB580333} = {740CF889-05A3-437D-AE61-E415CCE59EDB}
+		{B0BF7515-733F-4431-9313-B1F072CDDF3A} = {740CF889-05A3-437D-AE61-E415CCE59EDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E6F353EE-2EBC-494D-A3A3-FCFAD9A7568A}

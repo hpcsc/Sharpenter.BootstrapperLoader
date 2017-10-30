@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net462</TargetFrameworks>
     <Version>1.2.4.0</Version>
     <FileVersion>1.2.4.0</FileVersion>
     <Authors>David Nguyen</Authors>
@@ -9,7 +9,6 @@
     <Description>A simple library to load and execute bootstrapper classes in referenced dlls by convention</Description>
     <Copyright>Copyright © 2017 David Nguyen</Copyright>
   </PropertyGroup>
-
   <PropertyGroup>
     <PackageId>Sharpenter.BootstrapperLoader</PackageId>
     <PackageVersion>1.2.4.0</PackageVersion>
@@ -19,4 +18,8 @@
     <PackageProjectUrl>https://github.com/hpcsc/Sharpenter.BootstrapperLoader</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/hpcsc/Sharpenter.BootstrapperLoader/master/Sharpenter.png</PackageIconUrl>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="2.0.0" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+  </ItemGroup>
 </Project>

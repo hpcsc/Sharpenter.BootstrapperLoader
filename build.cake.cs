@@ -26,7 +26,7 @@ Task("Clean")
       }
     });
   });
- 
+
 Task("Restore")
   .IsDependentOn("Clean")
   .Does(() => {
@@ -48,7 +48,7 @@ Task("Build")
 Task("Test")
   .Does(() =>
   {
-    DotNetCoreTool("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", "xunit", "-xml TestResult.xml");
+    DotNetCoreTool("./Sharpenter.BootstrapperLoader.Tests/Sharpenter.BootstrapperLoader.Tests.csproj", "xunit", "-xml TestResult.xml -configuration " + buildConfiguration);
   });
 
 Task("Default")
