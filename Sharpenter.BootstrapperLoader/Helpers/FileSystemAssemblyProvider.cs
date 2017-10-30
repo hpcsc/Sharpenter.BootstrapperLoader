@@ -34,10 +34,8 @@ namespace Sharpenter.BootstrapperLoader.Helpers
                 #if NET462
                 return Assembly.LoadFrom(path);
                 #else
-                using (var dynamicContext = new AssemblyResolver(path))
-                {
-                    return dynamicContext.Assembly;
-                }
+                var customLoadContext = new CustomLoadContext(path);
+                return customLoadContext.LoadFromAssemblyPath(path);
                 #endif
             }
             #pragma warning disable 0168
