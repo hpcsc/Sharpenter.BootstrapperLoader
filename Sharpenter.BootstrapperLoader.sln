@@ -18,10 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{91DB82AD
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{2A52F559-E036-4D32-80E2-5C9901D94F77}"
-	ProjectSection(SolutionItems) = preProject
-		deployment\package.ps1 = deployment\package.ps1
-		deployment\Sharpenter.BootstrapperLoader.nuspec = deployment\Sharpenter.BootstrapperLoader.nuspec
-	EndProjectSection
+ProjectSection(SolutionItems) = preProject
+	package.ps1 = package.ps1
+EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpenter.BootstrapperLoader.Tests.DummyAssembly", "Sharpenter.BootstrapperLoader.Tests.DummyAssembly\Sharpenter.BootstrapperLoader.Tests.DummyAssembly.csproj", "{B0BF7515-733F-4431-9313-B1F072CDDF3A}"
 EndProject

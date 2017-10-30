@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyModel.Resolution;
 
 namespace Sharpenter.BootstrapperLoader.Helpers
 {
@@ -31,7 +27,7 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         {
             try
             {
-                #if NET462
+                #if NET452
                 return Assembly.LoadFrom(path);
                 #else
                 var customLoadContext = new CustomLoadContext(path);

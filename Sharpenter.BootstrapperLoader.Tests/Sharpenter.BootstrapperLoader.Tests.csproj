@@ -11,10 +11,10 @@
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta3-build3705" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net462</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net452</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <Version>1.2.4.0</Version>
-    <FileVersion>1.2.4.0</FileVersion>
+    <Version>1.2.5.0</Version>
+    <FileVersion>1.2.5.0</FileVersion>
     <Authors>David Nguyen</Authors>
     <Product>Sharpenter.BootstrapperLoader.Tests</Product>
     <Copyright>Copyright © 2017 David Nguyen</Copyright>
