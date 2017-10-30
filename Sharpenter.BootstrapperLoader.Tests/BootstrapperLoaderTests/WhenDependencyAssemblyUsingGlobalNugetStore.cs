@@ -30,8 +30,8 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
 
         private static string GetDummyAssemblyPath()
         {
-            #if NET462
-            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/Debug/net462";
+            #if NET452
+            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/Debug/net452";
             #else
             return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/Debug/netstandard2.0";
             #endif

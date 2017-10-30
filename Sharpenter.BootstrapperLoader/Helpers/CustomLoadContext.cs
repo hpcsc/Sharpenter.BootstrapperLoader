@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
-using Microsoft.Extensions.DependencyModel;
-using Microsoft.Extensions.DependencyModel.Resolution;
+﻿#if !NET452
 
 namespace Sharpenter.BootstrapperLoader.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Runtime.Loader;
+    using Microsoft.Extensions.DependencyModel;
+    using Microsoft.Extensions.DependencyModel.Resolution;
+    
     public class CustomLoadContext : AssemblyLoadContext
     {
         private readonly string _path;
@@ -63,3 +65,5 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         }
     }
 }
+
+#endif
