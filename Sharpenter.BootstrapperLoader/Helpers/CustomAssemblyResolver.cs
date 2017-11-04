@@ -48,15 +48,7 @@ namespace Sharpenter.BootstrapperLoader.Helpers
         {
             var assemblies = new List<string>();            
             var compilationLibrary = RuntimeToCompilationLibrary(runtimeLibrary);
-            var canResolve = _assemblyResolver.TryResolveAssemblyPaths(compilationLibrary, assemblies);
-            if (assemblies.Count > 0)
-            {
-                Console.WriteLine("Can resolve " + runtimeLibrary.Name + runtimeLibrary.Version);
-            }
-            else
-            {
-                Console.WriteLine("No assemblies found for " + runtimeLibrary.Name + runtimeLibrary.Version + " " + canResolve);
-            }
+            _assemblyResolver.TryResolveAssemblyPaths(compilationLibrary, assemblies);
             return assemblies.Count > 0 ? context.LoadFromAssemblyPath(assemblies[0]) : null;
         }
 
