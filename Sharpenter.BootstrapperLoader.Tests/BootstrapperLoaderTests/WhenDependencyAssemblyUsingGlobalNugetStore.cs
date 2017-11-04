@@ -30,11 +30,23 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
 
         private static string GetDummyAssemblyPath()
         {
+            // This test project doesn't have direct reference to DummyAssembly project, to simulate real situation where
+            // main project doesn't have direct references to projects with bootstrapper classes
+            var configuration = GetBuildConfiguration();
             #if NET452
-            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/Debug/net452";
+            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/" + configuration + "/net452";
             #else
-            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/Debug/netstandard2.0";
+            return "../../../../Sharpenter.BootstrapperLoader.Tests.DummyAssembly/bin/" + configuration + "/netstandard2.0";
             #endif
+        }
+
+        private static string GetBuildConfiguration()
+        {
+            #if DEBUG
+            return "Debug";
+            #else
+            return "Release";
+            #endif            
         }
     }
 }

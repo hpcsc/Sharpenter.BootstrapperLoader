@@ -7,11 +7,12 @@ var buildConfiguration = "Release";
 var solutionFile = "Sharpenter.BootstrapperLoader.sln";
 var mainProject = "./Sharpenter.BootstrapperLoader";
 var testProject = "./Sharpenter.BootstrapperLoader.Tests";
+var testDependencyProject = "./Sharpenter.BootstrapperLoader.Tests.DummyAssembly";
 
 Task("Clean")
   .Does(() =>
   {
-    var projects = new List<string> { mainProject, testProject };
+    var projects = new List<string> { mainProject, testProject, testDependencyProject };
     projects.ForEach(project => {
       var binDir = IO.Path.Combine(IO.Directory.GetCurrentDirectory(), project, "bin");
       if (DirectoryExists(binDir))
@@ -43,6 +44,8 @@ Task("Build")
     };
 
     DotNetCoreBuild(mainProject, settings);
+    DotNetCoreBuild(testProject, settings);
+    DotNetCoreBuild(testDependencyProject, settings);
   });
 
 Task("Test")
