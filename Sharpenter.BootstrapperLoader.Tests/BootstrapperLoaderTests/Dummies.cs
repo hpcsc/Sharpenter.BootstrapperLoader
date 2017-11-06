@@ -17,9 +17,9 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
 
     public class SomeBootstrapper
     {
-        public virtual void SomeConfigureContainer(ContainerBuilder container) { }
+        public virtual void ConfigureContainer(ContainerBuilder container) { }
 
-        public virtual void SomeConfigure(IFirstDependency first, ISecondDependency second) { }
+        public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
     }
 
     public class ThirdBootstrapper
@@ -32,5 +32,16 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
     public class FourthBootstrapper
     {
         public FourthBootstrapper(IFirstDependency dependency) { }
+    }
+
+    public class FifthBootstrapper
+    {
+        public virtual void ConfigureContainer(ContainerBuilder container) { }
+        
+        public virtual void SomeConfigureContainer(ContainerBuilder container) { }
+
+        public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
+        
+        public virtual void SomeConfigure(IFirstDependency first, ISecondDependency second) { }
     }
 }

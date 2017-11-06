@@ -1,26 +1,22 @@
-using Autofac;
 using System;
-using System.Reflection;
-using Sharpenter.BootstrapperLoader.Builder;
-using Sharpenter.BootstrapperLoader.Helpers;
-using Sharpenter.BootstrapperLoader;
+using Autofac;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDifferentClassAndMethodConfiguration
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaultClassAndMethodConfiguration
 {
     public class WhenOneOrMoreDependencyIsNotRegistered : TestBase
     {
         private Exception _exception;
-
         public WhenOneOrMoreDependencyIsNotRegistered()
         {
-            _containerBuilder.RegisterType<FirstDependency>().As<IFirstDependency>();
+            ContainerBuilder.RegisterType<FirstDependency>().As<IFirstDependency>();
         }
 
         [Fact(DisplayName = "Should throw resolution exception")]
         public void should_throw_resolution_exception()
         {
-            _exception = Assert.Throws<Exception>(() => _subject.TriggerConfigure(_containerBuilder.Build().Resolve));
+            _exception = Assert.Throws<Exception>(
+                                () => Subject.TriggerConfigure(ContainerBuilder.Build().Resolve));
 
             Assert.NotNull(_exception);
             Assert.Contains("Could not resolve a service", _exception.Message);

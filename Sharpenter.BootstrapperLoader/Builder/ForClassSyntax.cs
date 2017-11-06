@@ -24,10 +24,10 @@ namespace Sharpenter.BootstrapperLoader.Builder
 
             return this;
         }
-
-        public MethodsSyntax Methods()
+        
+        public WhenSyntax When(Func<bool> condition)
         {
-            return new MethodsSyntax(Config);
+            return new WhenSyntax(Config, condition);
         }
 
         public LoaderBuilder And()

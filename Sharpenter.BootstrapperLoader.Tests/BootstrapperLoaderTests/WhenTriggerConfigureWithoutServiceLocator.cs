@@ -12,8 +12,8 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
 {
     public class WhenTriggerConfigureWithoutServiceLocator
     {
-        private BootstrapperLoader _subject;
-        private Mock<ThirdBootstrapper> _bootstrapperMock;
+        private readonly BootstrapperLoader _subject;
+        private readonly Mock<ThirdBootstrapper> _bootstrapperMock;
 
         public WhenTriggerConfigureWithoutServiceLocator()
         {

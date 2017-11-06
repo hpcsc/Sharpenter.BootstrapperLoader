@@ -10,11 +10,13 @@ namespace Sharpenter.BootstrapperLoader.Internal
         private const string BootstrapperDefaultClassName = "Bootstrapper";        
         private const string ConfigureDefaultMethodName = "Configure";
 
-        private readonly Func<bool> AlwaysCall = () => true;
+        private bool _useDefaultConfigureMethod;
+
+        private readonly Func<bool> _alwaysCall = () => true;
 
         internal IAmInstanceCreator InstanceCreator { get; set; }
         internal string BootstrapperClassName { get; set; }
-        internal Dictionary<string, Func<bool>> ConfigureMethods { get; set; }
+        internal Dictionary<string, Func<bool>> ConfigureMethods { get; }
         internal IAssemblyProvider AssemblyProvider { get; set; }
 
         internal LoaderConfig()
@@ -22,8 +24,9 @@ namespace Sharpenter.BootstrapperLoader.Internal
             BootstrapperClassName = BootstrapperDefaultClassName;
             ConfigureMethods = new Dictionary<string, Func<bool>>
             {
-                {ConfigureDefaultMethodName, AlwaysCall}
+                {ConfigureDefaultMethodName, _alwaysCall}
             };
+            _useDefaultConfigureMethod = true;
 
             InstanceCreator = new ExpressionCreator();
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
@@ -31,10 +34,15 @@ namespace Sharpenter.BootstrapperLoader.Internal
 
         internal void AddConfigureMethod(string methodName)
         {
+            AddConfigureMethod(methodName, _alwaysCall);
+        }
+        
+        internal void AddConfigureMethod(string methodName, Func<bool> condition)
+        {
             if (ConfigureMethods.ContainsKey(methodName))
                 throw new ArgumentException(string.Format("Duplication configureation for method '{0}' detected", methodName));
 
-            ConfigureMethods[methodName] = AlwaysCall;
+            ConfigureMethods[methodName] = condition;
         }
 
         internal void UpdateMethodCallCondition(string name, Func<bool> condition)
@@ -45,9 +53,12 @@ namespace Sharpenter.BootstrapperLoader.Internal
             ConfigureMethods[name] = condition;
         }
 
-        internal void ClearMethodConfigurations()
+        internal void ClearDefaultMethodConfigurations()
         {
+            if (!_useDefaultConfigureMethod) return;
+            
             ConfigureMethods.Clear();
+            _useDefaultConfigureMethod = false;
         }
     }
 }

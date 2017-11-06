@@ -8,8 +8,8 @@ namespace Sharpenter.BootstrapperLoader.Tests.Builder.LoaderBuilderTests
 {
     public class WhenConfigClassNameUsingBuilder
     {
-        private Mock<IAssemblyProvider> _assemblyProviderMock;
-        private BootstrapperLoader _loader;
+        private readonly Mock<IAssemblyProvider> _assemblyProviderMock;
+        private readonly BootstrapperLoader _loader;
 
         public WhenConfigClassNameUsingBuilder()
         {
