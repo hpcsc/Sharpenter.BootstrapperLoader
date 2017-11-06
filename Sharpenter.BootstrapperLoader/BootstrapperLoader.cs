@@ -34,14 +34,19 @@ namespace Sharpenter.BootstrapperLoader
                                   .ToList();
         }
 
-        public void Trigger<TArg>(string methodName, TArg parameter)
+        public void TriggerConfigureContainer<TArg>(TArg parameter)
         {
             Bootstrappers.ForEach(bootstrapper =>
-                ExecuteIfNotNull(
-                    bootstrapper.GetType()
-                            .GetMethod(methodName, new[] {typeof(TArg)}),
-                    methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
-                );
+            {
+                Config.ConfigureContainerMethods
+                    .Where(c => c.Value())
+                    .ToList()
+                    .ForEach(methodConfiguration => 
+                        ExecuteIfNotNull(
+                            bootstrapper.GetType().GetMethod(methodConfiguration.Key, new[] {typeof(TArg)}),
+                            methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
+                    );
+            });
         }
 
         public void TriggerConfigure(Func<Type, object> serviceLocator = null)

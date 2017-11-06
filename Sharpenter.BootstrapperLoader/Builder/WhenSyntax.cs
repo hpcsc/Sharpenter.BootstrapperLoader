@@ -11,12 +11,20 @@ namespace Sharpenter.BootstrapperLoader.Builder
             : base(config)
         {
             _condition = condition;
-            Config.ClearDefaultMethodConfigurations();
         }
         
         public WhenSyntax CallConfigure(string configureMethodName)
         {
+            Config.ClearDefaultConfigureMethods();
             Config.AddConfigureMethod(configureMethodName, _condition);
+
+            return this;
+        }
+        
+        public WhenSyntax CallConfigureContainer(string configureContainerMethodName)
+        {
+            Config.ClearDefaultConfigureContainerMethods();
+            Config.AddConfigureContainerMethod(configureContainerMethodName, _condition);
 
             return this;
         }
