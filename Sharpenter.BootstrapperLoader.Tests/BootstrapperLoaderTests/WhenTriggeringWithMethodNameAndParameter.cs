@@ -11,9 +11,9 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
 {
     public class WhenTriggeringWithMethodNameAndParameter
     {
-        private BootstrapperLoader _subject;
-        private ContainerBuilder _containerBuilder;
-        private Mock<Bootstrapper> _bootstrapperMock;
+        private readonly BootstrapperLoader _subject;
+        private readonly ContainerBuilder _containerBuilder;
+        private readonly Mock<Bootstrapper> _bootstrapperMock;
 
         public WhenTriggeringWithMethodNameAndParameter()
         {
@@ -29,7 +29,7 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
         [Fact(DisplayName = "Should invoke default class and container method")]
         public void should_invoke_default_class_and_container_method()
         {
-            _subject.Trigger("ConfigureContainer", _containerBuilder);
+            _subject.TriggerConfigureContainer(_containerBuilder);
 
             _bootstrapperMock.Verify(b => b.ConfigureContainer(_containerBuilder));
         }
