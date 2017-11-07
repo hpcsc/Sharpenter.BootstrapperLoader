@@ -49,4 +49,12 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
     {
         public virtual void SomeMethod(string parameter) { }
     }
+    
+    public class SeventhBootstrapper
+    {
+        public virtual void ConfigureContainer(ContainerBuilder container) { }
+        public virtual void ConfigureDevelopmentContainer(ContainerBuilder container) { }
+        public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
+        public virtual void ConfigureDevelopment(IFirstDependency first, ISecondDependency second) { }
+    }
 }
