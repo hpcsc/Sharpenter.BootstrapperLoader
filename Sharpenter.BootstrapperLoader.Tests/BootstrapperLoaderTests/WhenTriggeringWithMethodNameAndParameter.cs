@@ -1,10 +1,7 @@
 using Moq;
-using Autofac;
-using System;
 using System.Reflection;
 using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
-using Sharpenter.BootstrapperLoader;
 using Xunit;
 
 namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
@@ -12,26 +9,24 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
     public class WhenTriggeringWithMethodNameAndParameter
     {
         private readonly BootstrapperLoader _subject;
-        private readonly ContainerBuilder _containerBuilder;
-        private readonly Mock<Bootstrapper> _bootstrapperMock;
+        private readonly Mock<SixthBootstrapper> _bootstrapperMock;
 
         public WhenTriggeringWithMethodNameAndParameter()
         {
-            _containerBuilder = new ContainerBuilder();
             var testDll = Assembly.GetExecutingAssembly();
-            _bootstrapperMock = new Mock<Bootstrapper>();
+            _bootstrapperMock = new Mock<SixthBootstrapper>();
             _subject = new LoaderBuilder()
                     .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                     .UseInstanceCreator(new FakeCreator(_bootstrapperMock.Object))
                     .Build();
         }
 
-        [Fact(DisplayName = "Should invoke default class and container method")]
+        [Fact(DisplayName = "Should invoke correct method with parameter")]
         public void should_invoke_default_class_and_container_method()
         {
-            _subject.TriggerConfigureContainer(_containerBuilder);
+            _subject.Trigger("SomeMethod", "some-parameter");
 
-            _bootstrapperMock.Verify(b => b.ConfigureContainer(_containerBuilder));
+            _bootstrapperMock.Verify(b => b.SomeMethod("some-parameter"));
         }
     }
 }

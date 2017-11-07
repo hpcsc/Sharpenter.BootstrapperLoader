@@ -33,6 +33,16 @@ namespace Sharpenter.BootstrapperLoader
                                   .Select(Config.InstanceCreator.Create))
                                   .ToList();
         }
+        
+        public void Trigger<TArg>(string methodName, TArg parameter)
+        {
+            Bootstrappers.ForEach(bootstrapper =>
+                ExecuteIfNotNull(
+                    bootstrapper.GetType()
+                        .GetMethod(methodName, new[] {typeof(TArg)}),
+                    methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
+            );
+        }
 
         public void TriggerConfigureContainer<TArg>(TArg parameter)
         {

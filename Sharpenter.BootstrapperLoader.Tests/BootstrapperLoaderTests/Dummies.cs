@@ -44,4 +44,9 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
         
         public virtual void SomeConfigure(IFirstDependency first, ISecondDependency second) { }
     }
+    
+    public class SixthBootstrapper
+    {
+        public virtual void SomeMethod(string parameter) { }
+    }
 }
