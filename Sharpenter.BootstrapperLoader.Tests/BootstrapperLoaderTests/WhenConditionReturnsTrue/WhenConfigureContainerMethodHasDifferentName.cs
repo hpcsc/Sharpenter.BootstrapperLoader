@@ -38,14 +38,13 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                 b => b.SomeConfigureContainer(Moq.It.IsAny<ContainerBuilder>()));
         }
         
-        [Fact(DisplayName = "Should not invoke default configure method")]
-        public void should_not_invoke_default_configure_method()
+        [Fact(DisplayName = "Should invoke default configure method")]
+        public void should_invoke_default_configure_method()
         {
             _subject.TriggerConfigureContainer(_containerBuilder);
             
             _bootstrapperMock.Verify(
-                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
-                Times.Never);
+                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()));
         }
     }
 }

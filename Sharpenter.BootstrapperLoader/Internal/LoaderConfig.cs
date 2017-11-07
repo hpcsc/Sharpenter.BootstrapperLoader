@@ -11,9 +11,6 @@ namespace Sharpenter.BootstrapperLoader.Internal
         private const string ConfigureDefaultMethodName = "Configure";
         private const string ConfigureContainerDefaultMethodName = "ConfigureContainer";
 
-        private bool _useDefaultConfigureMethod = true;
-        private bool _useDefaultConfigureContainerMethod = true;
-
         private readonly Func<bool> _alwaysCall = () => true;
 
         internal IAmInstanceCreator InstanceCreator { get; set; }
@@ -47,34 +44,12 @@ namespace Sharpenter.BootstrapperLoader.Internal
         
         internal void AddConfigureMethod(string methodName, Func<bool> condition)
         {
-            if (ConfigureMethods.ContainsKey(methodName))
-                throw new ArgumentException(string.Format("Duplication configuration for method '{0}' detected", methodName));
-
             ConfigureMethods[methodName] = condition;
         }
         
         internal void AddConfigureContainerMethod(string methodName, Func<bool> condition)
         {
-            if (ConfigureContainerMethods.ContainsKey(methodName))
-                throw new ArgumentException(string.Format("Duplication configuration for method '{0}' detected", methodName));
-
             ConfigureContainerMethods[methodName] = condition;
-        }
-
-        internal void ClearDefaultConfigureMethods()
-        {
-            if (!_useDefaultConfigureMethod) return;
-            
-            ConfigureMethods.Clear();
-            _useDefaultConfigureMethod = false;
-        }
-        
-        internal void ClearDefaultConfigureContainerMethods()
-        {
-            if (!_useDefaultConfigureContainerMethod) return;
-            
-            ConfigureContainerMethods.Clear();
-            _useDefaultConfigureContainerMethod = false;
         }
     }
 }
