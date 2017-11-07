@@ -38,6 +38,12 @@ namespace Sharpenter.BootstrapperLoader.Internal
             InstanceCreator = new ExpressionCreator();
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
         }
+
+        internal void AddMethodNameConvention(string nameConvention, Func<bool> condition)
+        {
+            AddConfigureMethod(ConfigureDefaultMethodName + nameConvention, condition);
+            AddConfigureContainerMethod(string.Format("Configure{0}Container", nameConvention), condition);
+        }
         
         internal void AddConfigureMethod(string methodName, Func<bool> condition)
         {
@@ -53,14 +59,6 @@ namespace Sharpenter.BootstrapperLoader.Internal
                 throw new ArgumentException(string.Format("Duplication configuration for method '{0}' detected", methodName));
 
             ConfigureContainerMethods[methodName] = condition;
-        }
-
-        internal void UpdateMethodCallCondition(string name, Func<bool> condition)
-        {
-            if (!ConfigureMethods.ContainsKey(name))
-                throw new ArgumentException(string.Format("Configuration for method '{0} not found", name));
-
-            ConfigureMethods[name] = condition;
         }
 
         internal void ClearDefaultConfigureMethods()

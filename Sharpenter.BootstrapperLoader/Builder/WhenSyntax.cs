@@ -29,6 +29,15 @@ namespace Sharpenter.BootstrapperLoader.Builder
             return this;
         }
 
+        public WhenSyntax AddMethodNameConvention(string nameConvention)
+        {
+            Config.ClearDefaultConfigureMethods();
+            Config.ClearDefaultConfigureContainerMethods();
+            Config.AddMethodNameConvention(nameConvention, _condition);
+            
+            return this;
+        }
+
         public ForClassSyntax And()
         {
             return new ForClassSyntax(Config);
