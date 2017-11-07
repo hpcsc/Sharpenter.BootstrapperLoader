@@ -11,7 +11,7 @@ namespace Sharpenter.BootstrapperLoader
     {
         internal List<object> Bootstrappers { get; private set; }
 
-        internal LoaderConfig Config { get; set; }
+        internal LoaderConfig Config { get; }
 
         internal BootstrapperLoader(LoaderConfig config)
         {

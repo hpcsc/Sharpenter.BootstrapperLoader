@@ -31,11 +31,11 @@ namespace Sharpenter.BootstrapperLoader.Tests.Builder.LoaderBuilderTests
                 .Build();
         }
 
-        [Fact(DisplayName = "Should not clear previous configuration")]
+        [Fact(DisplayName = "Should not clear previous configuration and maintain default methods")]
         public void should_not_clear_previous_configuration()
         {
-            Assert.Equal(new string[] { "Configure1", "Configure2", "Configure" }, _loader.Config.ConfigureMethods.Keys.ToArray());
-            Assert.Equal(new string[] { "ConfigureContainer1", "ConfigureContainer2", "ConfigureContainer" }, _loader.Config.ConfigureContainerMethods.Keys.ToArray());
+            Assert.Equal(new[] { "Configure", "Configure1", "Configure2" }, _loader.Config.ConfigureMethods.Keys.ToArray());
+            Assert.Equal(new[] { "ConfigureContainer", "ConfigureContainer1", "ConfigureContainer2" }, _loader.Config.ConfigureContainerMethods.Keys.ToArray());
         }
     }
 }

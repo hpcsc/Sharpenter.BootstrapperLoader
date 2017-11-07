@@ -15,7 +15,6 @@ namespace Sharpenter.BootstrapperLoader.Builder
         
         public WhenSyntax CallConfigure(string configureMethodName)
         {
-            Config.ClearDefaultConfigureMethods();
             Config.AddConfigureMethod(configureMethodName, _condition);
 
             return this;
@@ -23,7 +22,6 @@ namespace Sharpenter.BootstrapperLoader.Builder
         
         public WhenSyntax CallConfigureContainer(string configureContainerMethodName)
         {
-            Config.ClearDefaultConfigureContainerMethods();
             Config.AddConfigureContainerMethod(configureContainerMethodName, _condition);
 
             return this;
@@ -31,8 +29,6 @@ namespace Sharpenter.BootstrapperLoader.Builder
 
         public WhenSyntax AddMethodNameConvention(string nameConvention)
         {
-            Config.ClearDefaultConfigureMethods();
-            Config.ClearDefaultConfigureContainerMethods();
             Config.AddMethodNameConvention(nameConvention, _condition);
             
             return this;
