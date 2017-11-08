@@ -57,4 +57,11 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
         public virtual void Configure(IFirstDependency first, ISecondDependency second) { }
         public virtual void ConfigureDevelopment(IFirstDependency first, ISecondDependency second) { }
     }
+    
+    internal class NonPublicBootstrapper
+    {
+        internal virtual void ConfigureContainer(ContainerBuilder container) { }
+        internal virtual void Configure(IFirstDependency first) { }
+        internal virtual void OtherNonPublicMethod(string input) { }
+    }
 }
