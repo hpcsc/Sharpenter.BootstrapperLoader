@@ -33,7 +33,7 @@ MyCoolProject.Repository
     - EF/NHibernate mapping to database
 ```
 
-Ideally `UI` project should have reference to only `Model` project, but not `Repository` project, and the dependency direction will be: 
+Ideally `UI` project should have reference to only `Model` project, but not `Repository` project, and the dependency direction will be:
 
 `UI` -> `Model` <- `Repository`
 
@@ -57,7 +57,7 @@ public class Bootstrapper
         //Any initialization
     }
 }
-``` 
+```
 
 In `Startup.cs` in `MyCoolProject.UI`:
 
@@ -81,11 +81,11 @@ public class Startup
         _containerBuilder = new ContainerBuilder();
         //...
 
-        _bootstrapperLoader.Trigger("ConfigureContainer", _containerBuilder);
+        _bootstrapperLoader.TriggerConfigureContainer(_containerBuilder);
 
         //...
     }
-     
+
     public void Configure()
     {
         //Use Resolve() from Autofac container as service locator
@@ -96,53 +96,82 @@ public class Startup
 
 ## Configuration
 
-During configuration of `BootstrapperLoader`, it's possible to specify class name to look for (default is Bootstrapper):
+### Default Configuration
 
-```
-_bootstrapperLoader = new LoaderBuilder()
-                    .ForClass()
-                        .WithName("SomeBootstrapper")
-                    .Build();
-```
+By default, `BootstrapperLoader` has following settings:
+- use `FileSystemAssemblyProvider` to look for all `*.dll` in current folder (`Directory.GetCurrentDirectory()`)
+- `BootstrapperLoader.TriggerConfigure` looks for `Configure()` method in any class with name `Bootstrapper` in dlls found above
+- `BootstrapperLoader.TriggerConfigureContainer` looks for `ConfigureContainer()` method in any class with name `Bootstrapper` in dlls found above
 
-or pass some parameter to `Bootstrapper` constructor:
+### Configure LoaderBuilder
 
-```
-_bootstrapperLoader = new LoaderBuilder()
-                    .ForClass()
-                        .HasConstructorParameter<ISomeDependency>(new SomeDependency())
-                    .Build();
-```
+- `WithName("SomeBootstrapper")`: look for class with name `SomeBootstrapper` instead of `Bootstrapper`
 
-or configure method to look for (default is Configure):
+    Example:
 
-```
-_bootstrapperLoader = new LoaderBuilder()
-                    .ForClass()
-                        .Methods()
-                            .Call("SomeConfigureMethod")
-                    .Build();
-```
-
-or configure method and condition when should that method is called:
-
-```
-_bootstrapperLoader = new LoaderBuilder()
-                    .ForClass()
-                        .Methods()
-                            .Call("SomeConfigureMethod").If(() => /*some expression returning boolean*/)
-                    .Build();
-```
-
-or specify where to load assemblies (default is loading all dlls from current directory):
-
-```
-_bootstrapperLoader = new LoaderBuilder()
-                        .Use(new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "MyCoolProject*.dll")) //Look into current directory, grabs all dlls starting with MyCoolProject
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                        .ForClass()
+                            .WithName("SomeBootstrapper")
                         .Build();
-```
+    ```
+- `HasConstructorParameter<ISomeDependency>()`: when creating `Bootstrapper` instance, use constructor that takes `ISomeDependency` parameter
 
-or combination of above configuration
+    Example:
+
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                        .ForClass()
+                            .HasConstructorParameter<ISomeDependency>(new SomeDependency())
+                        .Build();
+    ```
+
+- `When(condition).CallConfigure("SomeConfigure")`: when calling `BootstrapperLoader.TriggerConfigure()`, if `condition` invocation is evaluated to true, call `SomeConfigure()` method in `Bootstrapper` classes in addition to `Configure()`
+
+    Example:
+
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                        .ForClass()
+                            .When(env.IsDevelopment)
+                                .CallConfigure("SomeConfigure")
+                        .Build();
+    ```
+
+- `When(condition).CallConfigureContainer("SomeConfigureContainer")`: when calling `BootstrapperLoader.TriggerConfigureContainer()`, if `condition` invocation is evaluated to true, call `SomeConfigureContainer()` method in `Bootstrapper` classes in addition to `ConfigureContainer()`
+
+    Example:
+
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                        .ForClass()
+                            .When(env.IsDevelopment)
+                                .CallConfigureContainer("SomeConfigureContainer")
+                        .Build();
+    ```
+
+- `When(condition).AddMethodNameConvention("Development")`: when calling `BootstrapperLoader.TriggerConfigure()`/ `BootstrapperLoader.TriggerConfigureContainer()`, if `condition` invocation is evaluated to true, call `SomeConfigure()`/`SomeConfigureContainer()` method in `Bootstrapper` classes in addition to `Configure()`/`ConfigureContainer()`
+
+    Example:
+
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                        .ForClass()
+                            .When(env.IsDevelopment)
+                                .AddMethodNameConvention("Development")
+                        .Build();
+    ```
+
+
+- `Use()`: specify an alternative assembly provider:
+
+    Example:
+
+    ```
+    _bootstrapperLoader = new LoaderBuilder()
+                            .Use(new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "MyCoolProject*.dll")) //Look into current directory, grabs all dlls starting with MyCoolProject
+                            .Build();
+    ```
 
 You can also create new Assembly Provider class, to customize the source of assemblies provided to the loader. At the moment, there are 2 classes provided:
 ```
@@ -152,18 +181,22 @@ You can also create new Assembly Provider class, to customize the source of asse
 
 ## Trigger bootstrapper from root project
 
-`BootstrapperLoader` provides 2 methods to trigger methods in sub-projects `Bootstrapper` class:
+`BootstrapperLoader` provides 3 methods to trigger methods in sub-projects `Bootstrapper` class:
 
-- `Trigger<TArg>(string methodName, TArg parameter)`
+- `TriggerConfigureContainer<TArg>(TArg parameter)`
 
-When this method is called, it will look for methods with specified name in `Bootstrapper` classes in sub-projects and invoke those, passing in provided parameter. Most of the time, this method should be used to trigger IoC registration in sub-projects, passing in IoC container from root project as parameter. Although with its general signature, it can be used for other purpose.
+This method should be used when root project is doing IoC registration. Its parameter is usually IoC container or container builder. This method will look for `ConfigureContainer` method in `Bootstrapper` classes and pass in the parameter, allow `Bootstrapper` classes to register child projects' dependencies to IoC container
 
 - `TriggerConfigure(Func<Type, object> serviceLocator = null)`
 
-This method is triggered when it's the right time to do any non-IoC configuration/initialization (.e.g. AutoMapper setting up). It can be called with or without `serviceLocator` parameter
+This method should be used when it's the right time to do any non-IoC configuration/initialization (.e.g. AutoMapper setting up). It can be called with or without `serviceLocator` parameter
 
 This method takes `Func<Type, object>` as its parameter to allow `Configure` method in `Bootstrapper` classes to take in any number of dependencies (as long as those dependencies can be resolved using serviceLocator func). It works in the same way with `Startup.Configure` in ASP.NET Core
 
-`Func<Type, object>` is used here to ensure this library is not dependent on any specific IoC container. Most IoC container should support a method with this signature (.e.g. in `Autofac`, it's `Resolve()` method) 
+`Func<Type, object>` is used here to ensure this library is not dependent on any specific IoC container. Most IoC container should support a method with this signature (.e.g. in `Autofac`, it's `Resolve()` method)
 
-When it's called without `serviceLocator` parameter, it will look for only `Configure()` method (without any parameter) in Bootstrapper classes
+When it's called without `serviceLocator` parameter, it will look for only `Configure()` method (without any parameter) in `Bootstrapper` classes
+
+- `Trigger<TArg>(string methodName, TArg parameter)`
+
+When this method is called, it will look for methods with specified name in `Bootstrapper` classes in sub-projects and invoke those, passing in provided parameter. This method is for any other situation where your project cannot use above 2 methods.
