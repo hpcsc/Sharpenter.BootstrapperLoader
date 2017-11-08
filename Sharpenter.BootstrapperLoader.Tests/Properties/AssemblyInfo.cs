@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("bec1fcdc-bdf6-45d6-8dcd-7641cf44e099")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] 
 
 // Version information for an assembly consists of the following four values:
 //

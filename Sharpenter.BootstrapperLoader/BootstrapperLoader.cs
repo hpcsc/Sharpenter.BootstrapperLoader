@@ -9,6 +9,8 @@ namespace Sharpenter.BootstrapperLoader
 {
     public class BootstrapperLoader
     {
+        private const BindingFlags MethodBindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+
         internal List<object> Bootstrappers { get; private set; }
 
         internal LoaderConfig Config { get; }
@@ -39,7 +41,7 @@ namespace Sharpenter.BootstrapperLoader
             Bootstrappers.ForEach(bootstrapper =>
                 ExecuteIfNotNull(
                     bootstrapper.GetType()
-                        .GetMethod(methodName, new[] {typeof(TArg)}),
+                        .GetMethod(methodName, MethodBindingFlags, null, new[] {typeof(TArg)}, null),
                     methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
             );
         }
@@ -53,7 +55,7 @@ namespace Sharpenter.BootstrapperLoader
                     .ToList()
                     .ForEach(methodConfiguration => 
                         ExecuteIfNotNull(
-                            bootstrapper.GetType().GetMethod(methodConfiguration.Key, new[] {typeof(TArg)}),
+                            bootstrapper.GetType().GetMethod(methodConfiguration.Key, MethodBindingFlags, null, new[] {typeof(TArg)}, null),
                             methodInfo => methodInfo.Invoke(bootstrapper, new object[] { parameter }))
                     );
             });
@@ -77,8 +79,8 @@ namespace Sharpenter.BootstrapperLoader
         private static MethodInfo GetMethodInfoByName(Type bootstrapperType, string methodName, Func<Type, object> serviceLocator)
         {
             return serviceLocator == null
-                ? bootstrapperType.GetMethod(methodName, new Type[0])
-                : bootstrapperType.GetMethod(methodName);
+                ? bootstrapperType.GetMethod(methodName, MethodBindingFlags, null, new Type[0], null)
+                : bootstrapperType.GetMethod(methodName, MethodBindingFlags);
         }
 
         private static void ExecuteIfNotNull(MethodInfo methodInfo, Action<MethodInfo> action)
