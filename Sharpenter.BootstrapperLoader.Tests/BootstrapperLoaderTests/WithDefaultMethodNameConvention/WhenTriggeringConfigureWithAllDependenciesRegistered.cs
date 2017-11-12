@@ -1,7 +1,7 @@
 using Autofac;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaultClassAndMethodConfiguration
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaultMethodNameConvention
 {
     public class WhenTriggeringConfigureWithAllDependenciesRegistered : TestBase
     {

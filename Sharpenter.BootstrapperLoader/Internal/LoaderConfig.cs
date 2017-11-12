@@ -22,18 +22,18 @@ namespace Sharpenter.BootstrapperLoader.Internal
         internal LoaderConfig()
         {
             BootstrapperClassName = BootstrapperDefaultClassName;
-            ConfigureMethods = new Dictionary<string, Func<bool>>
-            {
-                {ConfigureDefaultMethodName, _alwaysCall}
-            };
-            
-            ConfigureContainerMethods = new Dictionary<string, Func<bool>>
-            {
-                {ConfigureContainerDefaultMethodName, _alwaysCall}
-            };
+            ConfigureMethods = new Dictionary<string, Func<bool>>();
+            ConfigureContainerMethods = new Dictionary<string, Func<bool>>();
 
             InstanceCreator = new ExpressionCreator();
             AssemblyProvider = new FileSystemAssemblyProvider(Directory.GetCurrentDirectory(), "*.dll");
+        }
+        
+        internal void AddDefaultMethodNameConvention(Func<bool> providedCondition)
+        {
+            var condition = providedCondition ?? _alwaysCall;
+            AddConfigureMethod(ConfigureDefaultMethodName, condition);
+            AddConfigureContainerMethod(ConfigureContainerDefaultMethodName, condition);
         }
 
         internal void AddMethodNameConvention(string nameConvention, Func<bool> condition)

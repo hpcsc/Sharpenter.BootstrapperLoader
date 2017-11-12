@@ -22,6 +22,7 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDiffer
                 .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                 .ForClass()
                     .WithName("SomeBootstrapper")
+                    .AddDefaultMethodNameConvention()
                 .Build();
         }
     }

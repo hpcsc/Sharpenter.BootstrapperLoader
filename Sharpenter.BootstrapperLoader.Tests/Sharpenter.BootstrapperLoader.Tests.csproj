@@ -10,6 +10,9 @@
     <PackageReference Include="xunit" Version="2.3.0-beta3-build3705" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.0-beta3-build3705" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BootstrapperLoaderTests\WhenSyntax" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp2.0;net452</TargetFrameworks>
     <IsPackable>false</IsPackable>

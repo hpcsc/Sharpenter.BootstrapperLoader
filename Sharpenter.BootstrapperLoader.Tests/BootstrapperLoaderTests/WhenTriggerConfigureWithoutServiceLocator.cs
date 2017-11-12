@@ -24,6 +24,7 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
                 .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                 .ForClass()
                     .WithName("ThirdBootstrapper")
+                    .AddDefaultMethodNameConvention()
                 .Build();
         }
 

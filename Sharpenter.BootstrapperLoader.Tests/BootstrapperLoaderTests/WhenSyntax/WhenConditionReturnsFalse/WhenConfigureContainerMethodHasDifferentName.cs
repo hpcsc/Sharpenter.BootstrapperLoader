@@ -5,19 +5,17 @@ using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenConditionReturnsFalse
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenSyntax.WhenConditionReturnsFalse
 {
-    public class WhenConfigureMethodHasDifferentName
+    public class WhenConfigureContainerMethodHasDifferentName
     {
         private readonly BootstrapperLoader _subject;
         private readonly ContainerBuilder _containerBuilder;
         private readonly Mock<FifthBootstrapper> _bootstrapperMock;
 
-        public WhenConfigureMethodHasDifferentName()
+        public WhenConfigureContainerMethodHasDifferentName()
         {
             _containerBuilder = new ContainerBuilder();
-            _containerBuilder.RegisterType<FirstDependency>().As<IFirstDependency>();
-            _containerBuilder.RegisterType<SecondDependency>().As<ISecondDependency>();  
             
             var testDll = Assembly.GetExecutingAssembly();
             _bootstrapperMock = new Mock<FifthBootstrapper>();
@@ -27,27 +25,28 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                 .ForClass()
                     .WithName("FifthBootstrapper")
                     .When(() => false)
-                        .CallConfigure("SomeConfigure")
+                        .CallConfigureContainer("SomeConfigureContainer")
                 .Build();
         }
 
-        [Fact(DisplayName = "Should not invoke conditional configure method")]
-        public void should_not_invoke_configure_method()
+        [Fact(DisplayName = "Should not invoke conditional configure container method")]
+        public void should_not_invoke_configure_container_method()
         {
-            _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
+            _subject.TriggerConfigureContainer(_containerBuilder);
 
             _bootstrapperMock.Verify(
-                b => b.SomeConfigure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()),
+                b => b.SomeConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
                 Times.Never);
         }
         
-        [Fact(DisplayName = "Should invoke default configure method")]
-        public void should_invoke_default_configure_method()
+        [Fact(DisplayName = "Should not invoke default configure container method")]
+        public void should_not_invoke_default_configure_method()
         {
-            _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
+            _subject.TriggerConfigureContainer(_containerBuilder);
             
             _bootstrapperMock.Verify(
-                b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()));
+                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
+                Times.Never);
         }
     }
 }
