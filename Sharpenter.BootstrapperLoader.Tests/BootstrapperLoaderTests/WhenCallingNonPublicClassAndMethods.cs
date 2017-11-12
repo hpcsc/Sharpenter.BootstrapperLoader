@@ -25,6 +25,7 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests
                 .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                 .ForClass()
                     .WithName("NonPublicBootstrapper")
+                    .AddDefaultMethodNameConvention()
                 .Build();
         }
         

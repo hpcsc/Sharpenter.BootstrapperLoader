@@ -24,6 +24,13 @@ namespace Sharpenter.BootstrapperLoader.Builder
 
             return this;
         }
+
+        public ForClassSyntax AddDefaultMethodNameConvention(Func<bool> condition = null)
+        {
+            Config.AddDefaultMethodNameConvention(condition);
+            
+            return this;
+        }
         
         public WhenSyntax When(Func<bool> condition)
         {

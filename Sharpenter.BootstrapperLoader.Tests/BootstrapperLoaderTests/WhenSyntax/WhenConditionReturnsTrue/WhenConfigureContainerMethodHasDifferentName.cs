@@ -5,7 +5,7 @@ using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenConditionReturnsFalse
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenSyntax.WhenConditionReturnsTrue
 {
     public class WhenConfigureContainerMethodHasDifferentName
     {
@@ -24,28 +24,28 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                 .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
                 .ForClass()
                     .WithName("FifthBootstrapper")
-                    .When(() => false)
+                    .When(() => true)
                         .CallConfigureContainer("SomeConfigureContainer")
                 .Build();
         }
 
-        [Fact(DisplayName = "Should not invoke conditional configure container method")]
-        public void should_not_invoke_configure_container_method()
+        [Fact(DisplayName = "Should invoke correct configure container method")]
+        public void should_invoke_correct_configure_container_method()
         {
             _subject.TriggerConfigureContainer(_containerBuilder);
 
             _bootstrapperMock.Verify(
-                b => b.SomeConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
-                Times.Never);
+                b => b.SomeConfigureContainer(Moq.It.IsAny<ContainerBuilder>()));
         }
         
-        [Fact(DisplayName = "Should invoke default configure container method")]
+        [Fact(DisplayName = "Should not invoke default configure method")]
         public void should_invoke_default_configure_method()
         {
             _subject.TriggerConfigureContainer(_containerBuilder);
             
             _bootstrapperMock.Verify(
-                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()));
+                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
+                Times.Never);
         }
     }
 }

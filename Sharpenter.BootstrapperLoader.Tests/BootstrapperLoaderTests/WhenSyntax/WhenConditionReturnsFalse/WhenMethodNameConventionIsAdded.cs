@@ -5,7 +5,7 @@ using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenConditionReturnsFalse
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenSyntax.WhenConditionReturnsFalse
 {
     public class WhenMethodNameConventionIsAdded
     {
@@ -41,13 +41,14 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                 Times.Never);
         }
         
-        [Fact(DisplayName = "Should invoke default configure method")]
-        public void should_invoke_default_configure_method()
+        [Fact(DisplayName = "Should not invoke default configure method")]
+        public void should_not_invoke_default_configure_method()
         {
             _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
             
             _bootstrapperMock.Verify(
-                b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()));
+                b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()),
+                Times.Never);
         }
         
         [Fact(DisplayName = "Should not invoke configure container method by convention")]
@@ -60,13 +61,14 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                 Times.Never);
         }
         
-        [Fact(DisplayName = "Should invoke default configure container method")]
-        public void should_invoke_default_configure_container_method()
+        [Fact(DisplayName = "Should not invoke default configure container method")]
+        public void should_not_invoke_default_configure_container_method()
         {
             _subject.TriggerConfigureContainer(_containerBuilder);
             
             _bootstrapperMock.Verify(
-                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()));
+                b => b.ConfigureContainer(Moq.It.IsAny<ContainerBuilder>()),
+                Times.Never);
         }
     }
 }

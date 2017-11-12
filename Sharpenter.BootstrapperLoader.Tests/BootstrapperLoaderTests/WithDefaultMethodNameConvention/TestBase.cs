@@ -4,7 +4,7 @@ using Moq;
 using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaultClassAndMethodConfiguration
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaultMethodNameConvention
 {
     public class TestBase
     {
@@ -19,13 +19,10 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WithDefaul
             BootstrapperMock = new Mock<Bootstrapper>();
             Subject = new LoaderBuilder()
                     .Use(new InMemoryAssemblyProvider(() => new[] { testDll }))
-                    .UseInstanceCreator(MockInstanceCreator(BootstrapperMock.Object))
+                    .UseInstanceCreator(new FakeCreator(BootstrapperMock.Object))
+                    .ForClass()
+                        .AddDefaultMethodNameConvention()
                     .Build();                
-        }
-
-        private IAmInstanceCreator MockInstanceCreator(object instance)
-        {
-            return new FakeCreator(instance);
         }
     }
 }

@@ -5,7 +5,7 @@ using Sharpenter.BootstrapperLoader.Builder;
 using Sharpenter.BootstrapperLoader.Helpers;
 using Xunit;
 
-namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenConditionReturnsTrue
+namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenSyntax.WhenConditionReturnsTrue
 {
     public class WhenConfigureMethodHasDifferentName
     {
@@ -42,13 +42,14 @@ namespace Sharpenter.BootstrapperLoader.Tests.BootstrapperLoaderTests.WhenCondit
                         Moq.It.Is<ISecondDependency>(v => v is SecondDependency)));
         }
         
-        [Fact(DisplayName = "Should invoke default configure method")]
-        public void should_invoke_default_configure_method()
+        [Fact(DisplayName = "Should not invoke default configure method")]
+        public void should_not_invoke_default_configure_method()
         {
             _subject.TriggerConfigure(_containerBuilder.Build().Resolve);
             
             _bootstrapperMock.Verify(
-                b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()));
+                b => b.Configure(Moq.It.IsAny<IFirstDependency>(), Moq.It.IsAny<ISecondDependency>()),
+                Times.Never);
         }
     }
 }
